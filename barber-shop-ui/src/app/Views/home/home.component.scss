@@ -1,0 +1,22 @@
+.row {
+    background-color: #242424;
+}
+.title {
+    font-family: "Bebas Neue", serif;
+    > h1{
+        letter-spacing: .09rem;
+    }
+    >p{
+        font-family: "Lobster", serif !important;
+        font-size: large;
+    }
+}
+.btn{
+    color: white;
+    margin-top: 15px;
+    border: 2px solid #dbb042;
+    border-radius: 0;
+    &:hover{
+        background-color: #dbb042;
+    }
+}
