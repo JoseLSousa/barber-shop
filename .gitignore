@@ -1,0 +1,10 @@
+
+barber-shop-ui/.angular/
+barber-shop-ui/.vscode/
+barber-shop-ui/node_modules/
+barber-shop-ui/package-lock.json
+
+barber-shop-api/.idea/
+barber-shop-api/target/
+
+
