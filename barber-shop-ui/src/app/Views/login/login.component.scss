@@ -1,0 +1,70 @@
+@use '@angular/material' as mat;
+
+.login-col {
+    background-color: #242424;
+
+
+
+
+    h1 {
+        font-family: "Bebas Neue", serif;
+        letter-spacing: .09rem;
+    }
+
+    .login-button {
+        color: white;
+        border: 2px solid #dbb042;
+        border-radius: 0;
+    }
+
+    .recover-password {
+        text-decoration: none;
+        color: white;
+
+        &:hover {
+            color: #dbb042;
+            transition: ease-in-out 0.5s all;
+        }
+    }
+
+    .register-anchor {
+        font-family: "Bebas Neue", serif;
+        letter-spacing: .09rem;
+        text-decoration: none;
+        color: #dbb042;
+
+        &:hover {
+            color: white;
+            transition: ease-in-out 0.5s all;
+        }
+    }
+}
+
+.mat-form-field {
+    @include mat.form-field-overrides(( // Label
+    filled-caret-color: white, // Cor do cursor (barra piscante)
+    filled-input-text-color: white, // Cor do texto digitado
+    filled-label-text-color: white, // Cor inicial do label
+    filled-hover-label-text-color: white,
+    filled-active-indicator-color: white, // Linha padrão branca
+    filled-hover-active-indicator-color: white, // Linha branca ao passar o mouse
+    
+    filled-focus-active-indicator-color: #dbb042, // Linha fica #dbb042 quando clica no campo
+    filled-focus-label-text-color: #dbb042, // Cor do label quando foca no campo
+    
+    // Estilos para erro (voltam para branco)
+    filled-error-label-text-color: white, 
+    filled-error-hover-label-text-color: white,
+    filled-error-focus-label-text-color: white,
+    filled-error-active-indicator-color: white, 
+    filled-error-focus-active-indicator-color: white,
+    filled-error-hover-active-indicator-color: whitee));
+}
+
+.toggle-visibility {
+    @include mat.icon-overrides((color: white))
+}
+
+mat-error{
+    color: red;
+}
