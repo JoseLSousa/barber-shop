@@ -3,6 +3,7 @@ import { HomeComponent } from './Views/home/home.component';
 import { LayoutComponent } from './Views/Shared/layout/layout.component';
 import { BookingsComponent } from './Views/bookings/bookings.component';
 import { LoginComponent } from './Views/login/login.component';
+import { RegisterComponent } from './Views/register/register.component';
 
 export const routes: Routes = [
     {
@@ -12,5 +13,6 @@ export const routes: Routes = [
             { path: 'agenda', component: BookingsComponent },
         ]
     },
-    { path: 'login', component: LoginComponent }
+    { path: 'login', component: LoginComponent },
+    { path: 'cadastro', component: RegisterComponent }
 ];
