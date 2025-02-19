@@ -10,7 +10,7 @@ export const routes: Routes = [
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
             { path: 'agenda', component: BookingsComponent },
-            { path: 'login', component: LoginComponent }
         ]
-    }
+    },
+    { path: 'login', component: LoginComponent }
 ];
