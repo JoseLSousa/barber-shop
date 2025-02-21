@@ -4,9 +4,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatIconModule } from "@angular/material/icon";
 import { MatInputModule } from '@angular/material/input';
+import { RouterLink } from '@angular/router';
 @Component({
   selector: 'app-register',
-  imports: [MatFormFieldModule, MatInputModule, MatButtonModule, MatInputModule, ReactiveFormsModule, MatIconModule],
+  imports: [MatFormFieldModule, MatInputModule, MatButtonModule, MatInputModule, ReactiveFormsModule, MatIconModule, RouterLink],
   templateUrl: './register.component.html',
   styleUrl: './register.component.scss'
 })
