@@ -1,0 +1,15 @@
+FROM openjdk:17-jdk-alpine
+
+ARG JAR_FILE=target/*.jar
+
+ENV DB_ADDRESS=172.17.0.2
+ENV DB_PORT=5432
+# ENV DB_NAME=
+# ENV JWT_SECRET=
+
+EXPOSE 8080
+ENV CORS_ORIGIN=172.17.0.1
+
+COPY ${JAR_FILE} app.jar
+
+ENTRYPOINT ["java","-jar","/app.jar"]
