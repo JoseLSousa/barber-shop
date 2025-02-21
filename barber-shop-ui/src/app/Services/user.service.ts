@@ -6,4 +6,13 @@ import { Injectable } from '@angular/core';
 export class UserService {
 
   constructor() { }
+
+  getUserName(): string {
+    if (localStorage.getItem('name') === null) return ''
+    return `${localStorage.getItem('name')}`
+  }
+
+  logout(){
+    localStorage.clear()
+  }
 }
