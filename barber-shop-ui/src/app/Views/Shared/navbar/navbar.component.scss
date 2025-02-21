@@ -6,18 +6,53 @@
         letter-spacing: .1rem;
         color: white;
     }
-    > a:hover{
+
+    >a:hover {
         transition: ease-in-out .2s all;
         color: #dbb042 !important;
     }
-    > img{
+
+    >img {
         @media (max-width: 768px) {
             width: 100%;
             height: 80px;
         }
     }
+
+    >.dropdown {
+
+        >.dropdown-toggle {
+            font-family: "Bebas Neue", serif;
+            font-size: 25px;
+            letter-spacing: .1rem;
+            outline: none;
+            border: none;
+            background-color: rgba(0, 0, 0, 0);
+            color: white;
+
+            &:hover {
+                transition: ease-in-out .2s all;
+                color: #dbb042 !important;
+            }
+        }
+
+        >.dropdown-menu {
+            border-radius: 0;
+            background-color: #242424;
+
+
+            .dropdown-item {
+                color: white;
+
+                &:hover {
+                    transition: ease-in-out .2s all;
+                    color: #242424 !important;
+                }
+            }
+        }
+    }
 }
 
-.active{
+.active {
     color: #dbb042 !important;
 }
