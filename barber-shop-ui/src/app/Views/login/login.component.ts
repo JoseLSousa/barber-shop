@@ -4,7 +4,7 @@ import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatIconModule } from "@angular/material/icon";
 import { MatButtonModule } from "@angular/material/button";
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../Services/auth.service';
 
 
@@ -19,7 +19,7 @@ export class LoginComponent {
   loginForm: FormGroup
   hide = signal(true) // For password
   errorMessage = signal('')
-  constructor(private formBuilder: FormBuilder, private authService: AuthService) {
+  constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
@@ -28,9 +28,15 @@ export class LoginComponent {
 
   }
 
-  onLoginSubmit(){
-    if(this.loginForm.valid){
-      this.authService.postLogin(this.loginForm.value).subscribe(res => console.log(res))
+  onLoginSubmit() {
+    if (this.loginForm.valid) {
+      this.authService.postLogin(this.loginForm.value).subscribe(
+        (res) => {
+          localStorage.setItem("token", res.token)
+          localStorage.setItem("name", res.name)
+          this.router.navigate(['home'])
+        }
+      )
     }
   }
   clickEvent(event: MouseEvent) {
