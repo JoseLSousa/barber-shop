@@ -23,7 +23,7 @@
                 </mat-form-field>
                 <mat-form-field class="w-75 mat-form-field mb-3">
                     <mat-label>Senha</mat-label>
-                    <input matInput [type]="hide() ? 'password' : 'text'" (blur)="updatePasswordErrorMessage()"
+                    <input matInput [type]="hide() ? 'password' : 'text'" (blur)="updatePasswordErrorMessage()" formControlName="password"
                         required>
                     <button class="toggle-visibility" mat-icon-button matSuffix (click)="clickEvent($event)"
                         [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide()">
@@ -36,7 +36,7 @@
                 </mat-form-field>
 
                 <div class="d-flex justify-content-between align-items-center w-75">
-                    <button class="btn login-button" [disabled]="!registerForm.valid">Cadastrar</button>
+                    <button class="btn login-button" [disabled]="!registerForm.valid" (click)="onRegisterSubmit()">Cadastrar</button>
                 </div>
             </form>
             <div class="text-center my-5">
