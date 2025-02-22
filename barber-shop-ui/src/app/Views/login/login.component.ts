@@ -19,6 +19,7 @@ export class LoginComponent {
   loginForm: FormGroup
   hide = signal(true) // For password
   errorMessage = signal('')
+  loginErrorMessage: boolean = false
   constructor(private formBuilder: FormBuilder, private authService: AuthService, private router: Router) {
     this.loginForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.email]],
@@ -30,11 +31,15 @@ export class LoginComponent {
 
   onLoginSubmit() {
     if (this.loginForm.valid) {
+      this.loginErrorMessage = false
       this.authService.postLogin(this.loginForm.value).subscribe(
         (res) => {
           localStorage.setItem("token", res.token)
           localStorage.setItem("name", res.name)
           this.router.navigate(['home'])
+        },
+        () => {
+          this.loginErrorMessage = true
         }
       )
     }
