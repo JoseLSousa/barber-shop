@@ -14,9 +14,12 @@ import { RouterLink } from '@angular/router';
 export class RegisterComponent {
   registerForm: FormGroup
   hide = signal(true) // For password
-  errorMessage = signal('')
+  emailErrorMessage = signal('')
+  passwordErrorMessage = signal('')
+  NameErrorMessage = signal('')
   constructor(private formBuilder: FormBuilder) {
     this.registerForm = this.formBuilder.group({
+      name: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     })
@@ -26,13 +29,29 @@ export class RegisterComponent {
     event.stopPropagation()
   }
 
-  updateErrorMessage() {
+  updateEmailErrorMessage() {
     if (this.registerForm.get('email')?.hasError('required')) {
-      this.errorMessage.set('Você precisa digitar um email');
+      this.emailErrorMessage.set('Você precisa digitar um email');
     } else if (this.registerForm.get('email')?.hasError('email')) {
-      this.errorMessage.set('Email inválido');
+      this.emailErrorMessage.set('Email inválido');
     } else {
-      this.errorMessage.set('');
+      this.emailErrorMessage.set('');
+    }
+  }
+
+  updateNameErrorMessage() {
+    if (this.registerForm.get('name')?.hasError('required')) {
+      this.NameErrorMessage.set('Você precisa digitar um nome');
+    } else {
+      this.NameErrorMessage.set('');
+    }
+  }
+  updatePasswordErrorMessage() {
+    console.log(this.registerForm.get('password')?.hasError('required'))
+    if (this.registerForm.get('password')?.hasError('required')) {
+      this.passwordErrorMessage.set('Você precisa digitar uma senha');
+    } else {
+      this.passwordErrorMessage.set('');
     }
   }
 }
