@@ -10,12 +10,13 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "barber_shop_options")
 @Data
 @AllArgsConstructor
-
+@NoArgsConstructor
 public class BarberShopOption {
 
     @Id
@@ -30,4 +31,5 @@ public class BarberShopOption {
 
     @OneToMany(mappedBy = "barberShopOption")
     private List<Booking> bookings;
+
 }

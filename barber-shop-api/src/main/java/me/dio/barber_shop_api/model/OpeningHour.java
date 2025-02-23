@@ -11,11 +11,13 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Data
 @Table(name = "opening_hours")
 @AllArgsConstructor
+@NoArgsConstructor
 public class OpeningHour {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
@@ -28,4 +30,5 @@ public class OpeningHour {
     private LocalTime closingTime;
     @OneToMany(mappedBy = "openingHour")
     private List<Booking> bookings;
+
 }
