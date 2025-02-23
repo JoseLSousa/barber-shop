@@ -1,5 +1,6 @@
 package me.dio.barber_shop_api.model;
 
+import java.time.LocalTime;
 import java.time.OffsetDateTime;
 
 import jakarta.persistence.Column;
@@ -25,16 +26,26 @@ public class Booking {
     private String id;
 
     @Column(nullable = false, name = "start_at")
-    private OffsetDateTime startAt;
+    private LocalTime startAt;
     
     
     @Column(nullable = false, name = "ends_at")
-    private OffsetDateTime endsAt;
+    private LocalTime endsAt;
 
     @ToString.Exclude
     @ManyToOne
     @JoinColumn(name = "app_user_id", nullable = false)
     private AppUser appUser;
+
+    @ToString.Exclude
+    @ManyToOne
+    @JoinColumn(name = "openingHour_id", nullable = false)
+    private OpeningHour openingHour;
+
+    @ToString.Exclude
+    @ManyToOne
+    @JoinColumn(name = "barberShopOption_id", nullable = false)
+    private BarberShopOption barberShopOption;
 
     
 }
