@@ -45,7 +45,11 @@ public class AuthController {
 
         String encryptedPassword = new BCryptPasswordEncoder().encode(data.password());
 
-        AppUser user = new AppUser(data.name(), data.email(), encryptedPassword, data.role());
+        AppUser user = new AppUser();
+        user.setName(data.name());
+        user.setEmail(data.email());
+        user.setPassword(encryptedPassword);
+        user.setRole(data.role());
 
         repository.save(user);
 

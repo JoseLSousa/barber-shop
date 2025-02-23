@@ -21,7 +21,7 @@ public class TokenService {
 
     public String generateToken(AppUser user) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256("secret");
+            Algorithm algorithm = Algorithm.HMAC256(secret);
             String token = JWT.create().withIssuer("barber-shop-api")
                     .withSubject(user.getEmail())
                     .withExpiresAt(getExpirationDate())
@@ -36,7 +36,7 @@ public class TokenService {
 
     public String validateToken(String token) {
         try {
-            Algorithm algorithm = Algorithm.HMAC256("secret");
+            Algorithm algorithm = Algorithm.HMAC256(secret);
             return JWT.require(algorithm)
                     .withIssuer("barber-shop-api")
                     .build().verify(token)
