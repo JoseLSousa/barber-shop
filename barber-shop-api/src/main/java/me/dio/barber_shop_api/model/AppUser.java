@@ -57,12 +57,6 @@ public class AppUser implements UserDetails {
     @Column(name = "updated_at")
     private Date updatedAt;
 
-    public AppUser(String name, String email, String password, RoleEnum role) {
-        this.name = name;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
