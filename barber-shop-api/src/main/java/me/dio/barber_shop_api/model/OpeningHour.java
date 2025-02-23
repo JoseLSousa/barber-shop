@@ -3,12 +3,8 @@ package me.dio.barber_shop_api.model;
 import java.time.LocalTime;
 import java.util.List;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Table;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -28,7 +24,9 @@ public class OpeningHour {
     private LocalTime openingTime;
 
     private LocalTime closingTime;
-    @OneToMany(mappedBy = "openingHour")
+
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "bookings", referencedColumnName = "id")
     private List<Booking> bookings;
 
 }
