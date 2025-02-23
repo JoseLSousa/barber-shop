@@ -1,15 +1,10 @@
 package me.dio.barber_shop_api.model;
 
 import java.time.LocalTime;
-import java.time.OffsetDateTime;
+import java.util.List;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +14,7 @@ import lombok.ToString;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "bookings")
 public class Booking {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(nullable = false)
@@ -27,25 +23,19 @@ public class Booking {
 
     @Column(nullable = false, name = "start_at")
     private LocalTime startAt;
-    
-    
+
     @Column(nullable = false, name = "ends_at")
     private LocalTime endsAt;
 
-    @ToString.Exclude
-    @ManyToOne
-    @JoinColumn(name = "app_user_id", nullable = false)
-    private AppUser appUser;
+    @Column(name = "AppUser_id", nullable = false)
+    private String appUserId;
 
-    @ToString.Exclude
-    @ManyToOne
-    @JoinColumn(name = "openingHour_id", nullable = false)
-    private OpeningHour openingHour;
+    @Column(name = "openingHour_id", nullable = false)
+    private String openingHourId;
 
-    @ToString.Exclude
-    @ManyToOne
-    @JoinColumn(name = "barberShopOption_id", nullable = false)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "barberShopOption_id", referencedColumnName = "id")
     private BarberShopOption barberShopOption;
 
-    
+
 }
