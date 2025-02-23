@@ -3,7 +3,7 @@ package me.dio.barber_shop_api.services;
 import lombok.AllArgsConstructor;
 import me.dio.barber_shop_api.dtos.OpeningHour.RequestOpeningHourDTO;
 import me.dio.barber_shop_api.model.OpeningHour;
-import me.dio.barber_shop_api.repository.OpenignHourRepository;
+import me.dio.barber_shop_api.repository.OpeningHourRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,7 +12,7 @@ import java.util.List;
 @AllArgsConstructor
 public class OpeningHourService {
 
-    private final OpenignHourRepository repository;
+    private final OpeningHourRepository repository;
 
     public List<OpeningHour> findAll() {
         return repository.findAll();
