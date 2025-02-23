@@ -1,8 +1,20 @@
+FROM maven:3.9.7-sapmachine-17 AS build
+
+WORKDIR /app
+
+COPY pom.xml .
+
+COPY src ./src
+
+RUN mvn clean package -DskipTests
+
 FROM openjdk:17-jdk-alpine
 
-ARG JAR_FILE=target/*.jar
+WORKDIR /app
 
-#ENV DB_ADDRESS=172.17.0.2
+COPY --from=build /app/target/*.jar app.jar
+
+#ENV DB_ADDRESS=172.17.0.3
 #ENV DB_PORT=5432
 # ENV DB_NAME=
 # ENV JWT_SECRET=
@@ -10,6 +22,4 @@ ARG JAR_FILE=target/*.jar
 
 EXPOSE 8080
 
-COPY ${JAR_FILE} app.jar
-
-ENTRYPOINT ["java","-jar","/app.jar"]
+ENTRYPOINT ["java","-jar","app.jar"]
