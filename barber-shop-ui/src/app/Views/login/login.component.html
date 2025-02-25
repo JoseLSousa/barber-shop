@@ -1,9 +1,9 @@
-<div class="container h-100 d-flex align-items-center">
-    <div class="row">
-        <div class="col-lg-7">
-            <img src="whiteLogo.svg" alt="" class="img-fluid">
+<div class="container">
+    <div class="row pt-5">
+        <div class="col-lg-7 d-flex justify-content-center align-items-center pe-5">
+            <img src="whiteLogo.svg" alt="barberShopLogo" class="img-fluid">
         </div>
-        <div class="col-lg-5 login-col py-5">
+        <div class="col-lg-5 login-col py-5 align-self-baseline">
             <h1 class="text-center text-light">Login</h1>
             <form class="d-flex flex-column align-items-center" [formGroup]="loginForm">
                 <mat-form-field class="w-75 mat-form-field">
@@ -21,9 +21,13 @@
                         <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>
                     </button>
                 </mat-form-field>
-                <div class="d-flex justify-content-between align-items-center w-75">
-                    <button class="btn login-button" [disabled]="!loginForm.valid" (click)="onLoginSubmit()">Login</button>
-                    <a href="" class="recover-password">Esqueci a senha</a>
+                @if(loginErrorMessage){
+                <mat-error>Verifique suas credenciais e tente novamente</mat-error>
+                }
+                <div class="d-flex flex-nowrap justify-content-between align-items-center w-75 mt-4">
+                    <button class="btn login-button order-1 order-md-1 order-lg-0" [disabled]="!loginForm.valid"
+                        (click)="onLoginSubmit()">Login</button>
+                    <a href="" class="recover-password order-0 order-md-0 order-lg-1">Esqueci a senha</a>
                 </div>
             </form>
             <div class="text-center my-5">

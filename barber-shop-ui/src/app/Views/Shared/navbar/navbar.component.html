@@ -1,7 +1,18 @@
 <nav class="navbar navbar-expand-lg justify-content-center gap-4">
-    <a class="order-sm-2 order-lg-1" routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
-    <a class="order-sm-3 order-lg-2" routerLink="/agenda" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Agenda</a>
-    <img src="whiteLogo.svg" class="order-first order-lg-3" alt="" height="100px">
-    <a class="order-sm-4 order-lg-4">SOBRE</a>
-    <a class="order-sm-5 order-lg-5" routerLink="/login" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">LOGIN</a> 
+    <a class="order-1 order-md-0 order-lg-0" routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+    <a class="order-2 order-md-1 order-lg-1" routerLink="/agenda" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Agenda</a>
+    <img src="whiteLogo.svg" class="order-0 order-md-2 order-lg-2" alt="" height="100px">
+    <a class="order-3 order-md-3 order-lg-3">SOBRE</a>
+    <a class="order-4 order-md-4 order-lg-4" routerLink="/login" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" *ngIf="userName == ''">LOGIN</a>
+    <div class="dropdown order-4 order-md-4 order-lg-4" *ngIf="userName != ''">
+        <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+          {{userName}}
+        </button>
+        <ul class="dropdown-menu">
+          <li><button class="dropdown-item" type="button">Action</button></li>
+          <li><button class="dropdown-item" type="button">Another action</button></li>
+          <li><button class="dropdown-item" type="button" (click)="logout()">Sair</button></li>
+        </ul>
+      </div>
+    
 </nav>

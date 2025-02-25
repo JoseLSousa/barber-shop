@@ -39,7 +39,9 @@
         }
     }
 }
-
+.logo{
+    width: 30vw;
+}
 .mat-form-field {
     @include mat.form-field-overrides(( // Label
     filled-caret-color: white, // Cor do cursor (barra piscante)
