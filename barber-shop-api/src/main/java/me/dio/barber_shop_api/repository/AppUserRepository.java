@@ -14,6 +14,6 @@ public interface AppUserRepository extends JpaRepository<AppUser, String> {
 
     AppUser findNameByEmail(String email);
 
-    @Query("SELECT u.id FROM AppUser u WHERE u.email = :email")
-    String  findIdByEmail(@Param("email") String email);
+    @Query("SELECT u FROM AppUser u WHERE u.email = :email")
+    AppUser findAppUserByEmail(@Param("email") String email);
 }

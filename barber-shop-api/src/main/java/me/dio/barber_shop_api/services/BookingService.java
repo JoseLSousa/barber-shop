@@ -1,98 +1,90 @@
 package me.dio.barber_shop_api.services;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
-import me.dio.barber_shop_api.dtos.Booking.RequestBookingDTO;
-import me.dio.barber_shop_api.dtos.Booking.ResponseBookingDTO;
+import me.dio.barber_shop_api.dtos.booking.RequestBookingDTO;
+import me.dio.barber_shop_api.dtos.booking.RequestListByUserDTO;
+import me.dio.barber_shop_api.dtos.booking.ResponseBookingDTO;
+import me.dio.barber_shop_api.exceptions.*;
 import me.dio.barber_shop_api.model.AppUser;
-import me.dio.barber_shop_api.model.BarberShopOption;
 import me.dio.barber_shop_api.model.Booking;
-import me.dio.barber_shop_api.model.OpeningHour;
+import me.dio.barber_shop_api.model.ServiceBShop;
+import me.dio.barber_shop_api.model.WorkingDay;
 import me.dio.barber_shop_api.repository.AppUserRepository;
-import me.dio.barber_shop_api.repository.BarberShopOptionRepository;
+import me.dio.barber_shop_api.repository.ServiceBShopRepository;
 import me.dio.barber_shop_api.repository.BookingRepository;
-import me.dio.barber_shop_api.repository.OpeningHourRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
-import org.springframework.http.ResponseEntity;
+import me.dio.barber_shop_api.repository.WorkingDayRepository;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalTime;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @AllArgsConstructor
 public class BookingService {
 
-    private final BookingRepository repository;
-    private final OpeningHourRepository openingHourRepository;
+    private final BookingRepository bookingRepository;
+    private final WorkingDayRepository workingDayRepository;
     private final TokenService tokenService;
     private final AppUserRepository appUserRepository;
-    private final BarberShopOptionRepository barberShopOptionRepository;
+    private final ServiceBShopRepository serviceBShopRepository;
 
-    public List<Booking> getAll() {
-        return repository.findAll();
+    public List<Booking> listAll() {
+        return bookingRepository.findAll();
     }
 
-    public ResponseBookingDTO getById(String id) {
-        Booking booking = repository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Booking Not Found"));
-
-        return new ResponseBookingDTO(booking);
+    public Booking listById(String id) {
+        return bookingRepository.findById(id)
+                .orElseThrow(BookingNotFound::new);
     }
 
-    public ResponseEntity<ResponseBookingDTO> create(RequestBookingDTO body, String token) {
-        String email = tokenService.validateToken(token);
-        System.out.printf(email);
-        if (!verifyEntities(token, body)) {
-            return ResponseEntity.badRequest().build(); // Retorna HTTP 400 em caso de erro
-        }
-
-        String userId = getUserId(email);
-        Booking booking = new Booking();
-        booking.setAppUserId(userId);
-        booking.setStartAt(body.startAt());
-        booking.setEndsAt(body.endsAt());
-        booking.setBarberShopOption(getOption(body.barberShopOptionId()));
-        booking.setOpeningHourId(body.openingHourId());
-
-        repository.save(booking);
-        return ResponseEntity.ok(new ResponseBookingDTO(booking));
+    public List<RequestListByUserDTO> listByUserId(HttpServletRequest request) {
+        String userId = appUserExists(getEmailFromToken(request)).getId();
+        return bookingRepository.findBookingByAppUserId(userId);
     }
 
-
-    private boolean verifyEntities(String token, RequestBookingDTO body) {
-        String email = tokenService.validateToken(token);
-        if (email.isEmpty()) {
-            System.out.println("Usuário não existe ou token inválido");
-            return false;
-        }
-
-        if (!openingHourRepository.existsByOpeningTimeLessThanEqualAndClosingTimeGreaterThanEqual(body.startAt(), body.endsAt())) {
-            System.out.println("Fora do intervalo");
-            return false;
-        }
-
-        if (repository.existsByStartAtLessThanAndEndsAtGreaterThan(body.endsAt(), body.startAt())) {
-            System.out.println("Horário já reservado");
-            return false;
-        }
-
-        return true;
+    public void cancelBooking(String id) {
+        bookingExists(id);
+        bookingRepository.deleteById(id);
     }
 
+    public ResponseBookingDTO createBooking(RequestBookingDTO body, HttpServletRequest request) {
+        bookingExistsByTime(body.time()); // Verifica se já tem agendamento naquela hora
+        Booking newBooking = new Booking();
+        newBooking.setAppUser(appUserExists(getEmailFromToken(request)));
+        newBooking.setServiceBShop(serviceExists(body.serviceBShopId()));
+        newBooking.setTime(body.time());
+        newBooking.setWorkingDay(workingDayExists(body.workingDayId(), body.time()));
+        return ResponseBookingDTO.fromEntity(bookingRepository.save(newBooking));
 
-    private BarberShopOption getOption(String id) {
-        return barberShopOptionRepository.findById(id).orElse(null);
     }
 
-    private OpeningHour getOpeningHourId(String id) {
-        return openingHourRepository.findById(id).orElse(null);
+    private void bookingExists(String id) {
+        if (!bookingRepository.existsById(id)) throw new BookingNotFound();
     }
 
-    private String getUserId(String email) {
+    private void bookingExistsByTime(LocalTime time) {
+        if (bookingRepository.existsByTime(time)) throw new BookingAlreadyExists();
+    }
 
-        String user = appUserRepository.findIdByEmail(email);
-        if (user.isEmpty()) throw new RuntimeException("Usuário não encontrado para o e-mail: " + email);
+    private WorkingDay workingDayExists(String id, LocalTime time) {
+        return workingDayRepository.findValidWorkingDay(id, time).orElseThrow(BookingOutOfWorkingTimeBounds::new);
+    }
+
+    private ServiceBShop serviceExists(String id) {
+        return serviceBShopRepository.findById(id).orElseThrow(ServiceBShopNotFound::new);
+    }
+
+    private AppUser appUserExists(String email) {
+        AppUser user = appUserRepository.findAppUserByEmail(email);
+        if (user == null) throw new UsernameNotFoundException("");
         return user;
     }
+
+    private String getEmailFromToken(HttpServletRequest request) {
+        String token = request.getHeader("Authorization").split("Bearer ")[1];
+        return tokenService.validateToken(token);
+    }
+
 }
