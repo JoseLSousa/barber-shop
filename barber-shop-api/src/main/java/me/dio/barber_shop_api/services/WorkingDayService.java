@@ -8,11 +8,7 @@ import me.dio.barber_shop_api.exceptions.WorkingDayNotFound;
 import me.dio.barber_shop_api.model.DayOfWeek;
 import me.dio.barber_shop_api.model.WorkingDay;
 import me.dio.barber_shop_api.repository.WorkingDayRepository;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.MethodArgumentNotValidException;
 
 import java.util.List;
 
