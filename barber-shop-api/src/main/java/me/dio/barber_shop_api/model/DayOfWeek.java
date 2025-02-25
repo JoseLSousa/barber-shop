@@ -4,13 +4,14 @@ import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 public enum DayOfWeek {
-    MONDAY("monday"),
-    TUESDAY("tuesday"),
-    WEDNESDAY("wednesday"),
-    THURSDAY("thursday"),
-    FRIDAY("friday"),
-    SATURDAY("saturday"),
-    SUNDAY("sunday");
+    SEGUNDA("segunda"),
+    TERCA("terça"),
+    QUARTA("quarta"),
+    QUINTA("quinta"),
+    SEXTA("sexta"),
+    SABADO("sabado"),
+    DOMINGO("domingo");
+
 
     private String day;
 

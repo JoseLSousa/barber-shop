@@ -1,4 +1,4 @@
-package me.dio.barber_shop_api.dtos.WorkingDay;
+package me.dio.barber_shop_api.dtos.workingDay;
 
 import jakarta.validation.constraints.NotNull;
 import me.dio.barber_shop_api.model.DayOfWeek;

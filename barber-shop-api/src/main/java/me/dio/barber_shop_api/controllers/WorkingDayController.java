@@ -2,7 +2,7 @@ package me.dio.barber_shop_api.controllers;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import me.dio.barber_shop_api.dtos.WorkingDay.RequestWorkingDayDTO;
+import me.dio.barber_shop_api.dtos.workingDay.RequestWorkingDayDTO;
 import me.dio.barber_shop_api.model.WorkingDay;
 import me.dio.barber_shop_api.services.WorkingDayService;
 import org.springframework.http.HttpStatus;

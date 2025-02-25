@@ -1,14 +1,11 @@
 package me.dio.barber_shop_api.model;
 
 import java.time.LocalTime;
-import java.util.List;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import me.dio.barber_shop_api.dtos.WorkingDay.RequestWorkingDayDTO;
 
 @Entity
 @Data
