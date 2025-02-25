@@ -1,12 +1,12 @@
 package me.dio.barber_shop_api.repository;
 
-import me.dio.barber_shop_api.model.DayOfWeek;
 import me.dio.barber_shop_api.model.WorkingDay;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Optional;
 
@@ -19,7 +19,7 @@ public interface WorkingDayRepository extends JpaRepository<WorkingDay, String> 
             """)
     Optional<WorkingDay> findValidWorkingDay(@Param("id") String id, @Param("time") LocalTime time);
 
-    boolean existsByDayOfWeek(DayOfWeek dayOfWeek);
+    boolean existsByDayOfMonth(LocalDate dayOfMonth);
 
     boolean existsById(String id);
 

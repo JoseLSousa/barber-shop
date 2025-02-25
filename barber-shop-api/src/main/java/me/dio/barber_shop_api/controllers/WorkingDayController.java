@@ -30,8 +30,8 @@ public class WorkingDayController {
     }
 
     @PostMapping
-    public ResponseEntity<WorkingDay> create(@RequestBody WorkingDay body) {
-        return new ResponseEntity<WorkingDay>(service.create(body), HttpStatus.CREATED);
+    public ResponseEntity<WorkingDay> create(@RequestBody RequestWorkingDayDTO body) {
+        return new ResponseEntity<WorkingDay>(service.create(body.toEntity()), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

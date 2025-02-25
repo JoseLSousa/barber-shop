@@ -5,11 +5,11 @@ import lombok.AllArgsConstructor;
 import me.dio.barber_shop_api.exceptions.EmptyBodyPayload;
 import me.dio.barber_shop_api.exceptions.WorkingDayAlreadyExists;
 import me.dio.barber_shop_api.exceptions.WorkingDayNotFound;
-import me.dio.barber_shop_api.model.DayOfWeek;
 import me.dio.barber_shop_api.model.WorkingDay;
 import me.dio.barber_shop_api.repository.WorkingDayRepository;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Service
@@ -27,7 +27,7 @@ public class WorkingDayService {
     }
 
     public WorkingDay create(WorkingDay body) {
-        if (workingDayExists(body.getDayOfWeek())) throw new WorkingDayAlreadyExists();
+        if (workingDayExists(body.getDayOfMonth())) throw new WorkingDayAlreadyExists();
         return repository.save(body);
     }
 
@@ -48,8 +48,8 @@ public class WorkingDayService {
         return (body == null) ? true : false;
     }
 
-    private boolean workingDayExists(DayOfWeek dayOfWeek) {
-        return repository.existsByDayOfWeek(dayOfWeek);
+    private boolean workingDayExists(LocalDate dayOfWeek) {
+        return repository.existsByDayOfMonth(dayOfWeek);
     }
 
     private boolean workingDayExistsById(String id) {
