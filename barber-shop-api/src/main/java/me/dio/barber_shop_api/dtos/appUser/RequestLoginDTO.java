@@ -1,5 +1,5 @@
-package me.dio.barber_shop_api.dtos;
+package me.dio.barber_shop_api.dtos.appUser;
 
-public record AuthDTO(String email, String password) {
+public record RequestLoginDTO(String email, String password) {
 
 }
