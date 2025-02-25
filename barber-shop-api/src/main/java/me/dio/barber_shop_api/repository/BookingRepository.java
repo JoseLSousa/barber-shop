@@ -4,6 +4,7 @@ import me.dio.barber_shop_api.model.Booking;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.Optional;
 
@@ -11,5 +12,5 @@ import java.util.Optional;
 public interface BookingRepository extends JpaRepository<Booking, String> {
     Optional<Booking> findById(String id);
 
-    boolean existsByStartAtLessThanAndEndsAtGreaterThan(LocalTime startAt, LocalTime endsAt);
+    boolean existsByTime(LocalTime time);
 }

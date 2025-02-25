@@ -1,15 +1,23 @@
-package me.dio.barber_shop_api.dtos.Booking;
+package me.dio.barber_shop_api.dtos.booking;
 
 
-import me.dio.barber_shop_api.model.BarberShopOption;
 import me.dio.barber_shop_api.model.Booking;
 
 import java.time.LocalTime;
-import java.util.List;
 
-public record ResponseBookingDTO(String id, LocalTime startAt, LocalTime endsAt,
-                                 BarberShopOption barberShopOptionId) {
-    public ResponseBookingDTO(Booking booking) {
-        this(booking.getId(), booking.getStartAt(), booking.getEndsAt(), booking.getBarberShopOption());
+public record ResponseBookingDTO(
+        String id,
+        LocalTime time,
+        String serviceBShopId,
+        String workingDayId) {
+
+    public static ResponseBookingDTO fromEntity(Booking booking) {
+        return new ResponseBookingDTO(
+                booking.getId(),
+                booking.getTime(),
+                booking.getServiceBShop().getId(),
+                booking.getWorkingDay().getId()
+        );
     }
 }
+

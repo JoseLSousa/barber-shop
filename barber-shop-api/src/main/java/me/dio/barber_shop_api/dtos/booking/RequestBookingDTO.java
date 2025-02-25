@@ -1,6 +1,7 @@
-package me.dio.barber_shop_api.dtos.Booking;
+package me.dio.barber_shop_api.dtos.booking;
 
 import java.time.LocalTime;
 
-public record RequestBookingDTO(LocalTime startAt, LocalTime endsAt, String openingHourId, String barberShopOptionId) {
+public record RequestBookingDTO(String serviceBShopId, String workingDayId, LocalTime time) {
+
 }
