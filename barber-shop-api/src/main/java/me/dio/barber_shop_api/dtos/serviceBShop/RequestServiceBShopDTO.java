@@ -1,9 +1,6 @@
-package me.dio.barber_shop_api.dtos.ServiceBShop;
+package me.dio.barber_shop_api.dtos.serviceBShop;
 
-import jakarta.validation.constraints.NotNull;
 import me.dio.barber_shop_api.model.ServiceBShop;
-
-import java.time.Duration;
 
 public record RequestServiceBShopDTO(String name, String description, Integer price) {
     public ServiceBShop toEntity() {

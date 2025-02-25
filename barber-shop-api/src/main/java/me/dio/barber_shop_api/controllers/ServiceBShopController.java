@@ -2,7 +2,7 @@ package me.dio.barber_shop_api.controllers;
 
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import me.dio.barber_shop_api.dtos.ServiceBShop.RequestServiceBShopDTO;
+import me.dio.barber_shop_api.dtos.serviceBShop.RequestServiceBShopDTO;
 import me.dio.barber_shop_api.model.ServiceBShop;
 import me.dio.barber_shop_api.services.ServiceBShopService;
 import org.springframework.http.ResponseEntity;
