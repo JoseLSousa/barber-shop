@@ -2,6 +2,7 @@ package me.dio.barber_shop_api.security;
 
 import java.io.IOException;
 
+import me.dio.barber_shop_api.exceptions.TokenExpiredOrUserNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -32,7 +33,7 @@ public class SecurityFilter extends OncePerRequestFilter {
         if (token != null) {
             var subject = tokenService.validateToken(token);
             UserDetails user = repository.findByEmail(subject);
-
+            if (user == null) throw new TokenExpiredOrUserNotFound();
             var authentication = new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
             SecurityContextHolder.getContext().setAuthentication(authentication);
 
