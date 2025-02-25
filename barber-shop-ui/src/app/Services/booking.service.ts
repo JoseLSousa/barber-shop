@@ -11,6 +11,6 @@ export class BookingService {
   constructor(private http: HttpClient) { }
 
   getBookings():Observable<any> {
-    return this.http.get(`${this.apiUrl}/bookings`);
+    return this.http.get(`${this.apiUrl}/bookings/user-id`);
   }
 }

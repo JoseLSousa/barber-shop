@@ -1,0 +1,21 @@
+@use '@angular/material' as mat;
+
+.container {
+    background-color: #242424;
+
+    >h1 {
+        font-family: "Bebas Neue", serif;
+        letter-spacing: .09rem;
+        color: white;
+    }
+}
+
+.accordion {
+    letter-spacing: .09rem;
+    @include mat.expansion-overrides((
+      container-background-color: rgb(24, 24, 24),
+      container-text-color: rgb(255, 255, 255),
+      header-text-font: ("Bebas Neue", serif),
+      container-text-line-height: (120px)
+    ));
+  }
