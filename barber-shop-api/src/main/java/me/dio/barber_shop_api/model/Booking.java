@@ -1,6 +1,5 @@
 package me.dio.barber_shop_api.model;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 
 import jakarta.persistence.*;
@@ -12,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "bookings", uniqueConstraints = {@UniqueConstraint(columnNames = {"date", "time"})})
+@Table(name = "bookings", uniqueConstraints = {@UniqueConstraint(columnNames = {"time"})})
 public class Booking {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(nullable = false)

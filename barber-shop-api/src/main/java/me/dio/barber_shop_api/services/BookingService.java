@@ -3,6 +3,7 @@ package me.dio.barber_shop_api.services;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import me.dio.barber_shop_api.dtos.booking.RequestBookingDTO;
+import me.dio.barber_shop_api.dtos.booking.RequestListByUserDTO;
 import me.dio.barber_shop_api.dtos.booking.ResponseBookingDTO;
 import me.dio.barber_shop_api.exceptions.*;
 import me.dio.barber_shop_api.model.AppUser;
@@ -36,6 +37,11 @@ public class BookingService {
     public Booking listById(String id) {
         return bookingRepository.findById(id)
                 .orElseThrow(BookingNotFound::new);
+    }
+
+    public List<RequestListByUserDTO> listByUserId(HttpServletRequest request) {
+        String userId = appUserExists(getEmailFromToken(request)).getId();
+        return bookingRepository.findBookingByAppUserId(userId);
     }
 
     public void cancelBooking(String id) {

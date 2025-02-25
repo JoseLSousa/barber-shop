@@ -39,6 +39,11 @@ public class BookingController {
         }
     }
 
+    @GetMapping("/user-id")
+    public ResponseEntity<?> listByUserId(HttpServletRequest request) {
+        return ResponseEntity.ok(service.listByUserId(request));
+    }
+
     @DeleteMapping("{id}")
     public ResponseEntity<?> cancelBooking(@PathVariable String id) {
         try {
