@@ -13,6 +13,11 @@ import java.util.Optional;
 
 @Repository
 public interface WorkingDayRepository extends JpaRepository<WorkingDay, String> {
+    Optional<WorkingDay> findById(String id);
+
+    @Query("SELECT wd FROM WorkingDay wd WHERE wd.dayOfMonth = :dayOfMonth")
+    WorkingDay findDayOfMonth(@Param("dayOfMonth") LocalDate dayOfMonth);
+
     @Query("""
             SELECT wd FROM WorkingDay wd WHERE wd.id = :id
             AND :time BETWEEN wd.openingTime AND wd.closingTime
