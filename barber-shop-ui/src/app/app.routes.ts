@@ -16,7 +16,7 @@ export const routes: Routes = [
                 path: 'agenda', canActivate: [authenticationGuard], children: [
                     { path: '', component: BookingsComponent },
                     {
-                        path: ':id', component: BookingHandlerComponent
+                        path: 'novo-agendamento', component: BookingHandlerComponent
                     }
                 ]
             },
