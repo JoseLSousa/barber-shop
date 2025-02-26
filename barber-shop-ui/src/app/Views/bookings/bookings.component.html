@@ -1,14 +1,43 @@
 <div class="container text-center mt-3 p-3">
-    <h1>Meus Agendamentos</h1>
+  <div class="d-flex justify-content-between">
     <div>
-        <mat-accordion class="accordion">
-            <mat-expansion-panel *ngFor="let booking of myBookings">
-              <mat-expansion-panel-header>
-                <mat-panel-title>{{booking.dayOfWeek}}</mat-panel-title>
-                <mat-panel-description> This is a summary of the content </mat-panel-description>
-              </mat-expansion-panel-header>
-              <p>This is the primary content of the panel.</p>
-            </mat-expansion-panel>
-          </mat-accordion>
+      <h1 class="page-title mb-0">Meus Agendamentos</h1>
     </div>
+    <div>
+      <button class="btn new-booking-button" routerLink="novo-agendamento">Novo Agendamento</button>
+    </div>
+  </div>
+  <div class="table-container mt-3">
+    <table mat-table [dataSource]="myBookings" class="mat-elevation-z8">
+      <ng-container matColumnDef="service">
+        <th mat-header-cell *matHeaderCellDef>Serviço</th>
+        <td mat-cell *matCellDef="let element"> {{element.serviceName}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="dayOfMonth">
+        <th mat-header-cell *matHeaderCellDef>Dia</th>
+        <td mat-cell *matCellDef="let element"> {{element.dayOfMonth | date:'dd/MM/yyyy'}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="time">
+        <th mat-header-cell *matHeaderCellDef>Horário</th>
+        <td mat-cell *matCellDef="let element"> {{element.time | time }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="price">
+        <th mat-header-cell *matHeaderCellDef>Preço</th>
+        <td mat-cell *matCellDef="let element"> {{element.price / 10 | currency: 'BRL' }} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="options">
+        <th mat-header-cell *matHeaderCellDef>Ações</th>
+        <td mat-cell *matCellDef="let element">
+          <button class="btn btn-outline-danger bi bi-trash rounded-0">Cancelar</button>
+        </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+  </div>
 </div>
