@@ -11,3 +11,22 @@ body {
 * {
   margin: 0;
 }
+
+::-webkit-scrollbar{
+  width: 7px;
+  height: 5px
+}
+
+::-webkit-scrollbar-track{
+ background-color: white;
+}
+
+::-webkit-scrollbar-thumb{
+  background-color: #827f7f;
+
+}
+::-webkit-scrollbar-thumb:hover{
+  transition: ease-in-out .2s all;
+  background-color: #dbb042;
+
+}
