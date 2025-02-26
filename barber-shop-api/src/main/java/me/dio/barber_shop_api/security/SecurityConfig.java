@@ -34,7 +34,8 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/bookings").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/services-barber-shop").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/working-days").hasRole("ADMIN")
                         .anyRequest().authenticated())
                         .cors(c -> c.configurationSource(CorsConfig))
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
