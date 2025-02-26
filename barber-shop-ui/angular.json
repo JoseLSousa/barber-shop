@@ -4,6 +4,9 @@
   "newProjectRoot": "projects",
   "projects": {
     "barber-shop-ui": {
+      "i18n":{
+        "sourceLocale": "pt-BR"
+      },
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
