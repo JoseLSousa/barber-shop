@@ -6,11 +6,14 @@ import me.dio.barber_shop_api.dtos.booking.RequestBookingDTO;
 import me.dio.barber_shop_api.dtos.booking.ResponseBookingDTO;
 import me.dio.barber_shop_api.model.Booking;
 import me.dio.barber_shop_api.services.BookingService;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -24,12 +27,12 @@ public class BookingController {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.createBooking(body, request));
     }
 
-    @GetMapping
-    public ResponseEntity<List<Booking>> listAll() {
-        return ResponseEntity.ok(service.listAll());
+    @GetMapping("/available-hours")
+    public ResponseEntity<List<LocalTime>> getAvailableHoursByDay(@RequestParam("day") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate day) {
+        return ResponseEntity.ok(service.getAvailableHours(day));
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<?> getById(@PathVariable String id) {
         try {
             Booking booking = service.listById(id);
@@ -39,12 +42,12 @@ public class BookingController {
         }
     }
 
-    @GetMapping("/user-id")
+    @GetMapping
     public ResponseEntity<?> listByUserId(HttpServletRequest request) {
         return ResponseEntity.ok(service.listByUserId(request));
     }
 
-    @DeleteMapping("{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<?> cancelBooking(@PathVariable String id) {
         try {
             service.cancelBooking(id);
