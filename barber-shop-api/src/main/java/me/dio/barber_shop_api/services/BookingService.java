@@ -3,7 +3,7 @@ package me.dio.barber_shop_api.services;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
 import me.dio.barber_shop_api.dtos.booking.RequestBookingDTO;
-import me.dio.barber_shop_api.dtos.booking.RequestListByUserDTO;
+import me.dio.barber_shop_api.dtos.booking.RequestBookingListByUserDTO;
 import me.dio.barber_shop_api.dtos.booking.ResponseBookingDTO;
 import me.dio.barber_shop_api.exceptions.*;
 import me.dio.barber_shop_api.model.AppUser;
@@ -17,7 +17,9 @@ import me.dio.barber_shop_api.repository.WorkingDayRepository;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -30,18 +32,32 @@ public class BookingService {
     private final AppUserRepository appUserRepository;
     private final ServiceBShopRepository serviceBShopRepository;
 
-    public List<Booking> listAll() {
-        return bookingRepository.findAll();
-    }
-
     public Booking listById(String id) {
         return bookingRepository.findById(id)
                 .orElseThrow(BookingNotFound::new);
     }
 
-    public List<RequestListByUserDTO> listByUserId(HttpServletRequest request) {
+    public List<RequestBookingListByUserDTO> listByUserId(HttpServletRequest request) {
         String userId = appUserExists(getEmailFromToken(request)).getId();
         return bookingRepository.findBookingByAppUserId(userId);
+    }
+
+    public List<LocalTime> getAvailableHours(LocalDate date) {
+        WorkingDay workingDay = workingDayRepository.findDayOfMonth(date);
+        if (workingDay == null) throw new WorkingDayNotFound();
+        // Horários já reservados
+        ArrayList<LocalTime> bookedHours = bookingRepository.findBookingByWorkingDayId(workingDay.getId());
+        // Lista dos horários disponíveis do dia selecionado
+        ArrayList<LocalTime> availableHours = new ArrayList<>();
+        LocalTime currentTime = workingDay.getOpeningTime();
+
+        while (currentTime.isBefore(workingDay.getClosingTime().plusHours(1))) {
+            if (!bookedHours.contains(currentTime)) {
+                availableHours.add(currentTime);
+            }
+            currentTime = currentTime.plusHours(1);
+        }
+        return availableHours;
     }
 
     public void cancelBooking(String id) {

@@ -1,5 +1,6 @@
 package me.dio.barber_shop_api.model;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 
 import jakarta.persistence.*;
@@ -17,9 +18,8 @@ public class WorkingDay {
     @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @Enumerated(EnumType.STRING)
     @Column(nullable = false, unique = true)
-    private DayOfWeek dayOfWeek;
+    private LocalDate dayOfMonth;
 
     @Column(nullable = false)
     private LocalTime openingTime;
