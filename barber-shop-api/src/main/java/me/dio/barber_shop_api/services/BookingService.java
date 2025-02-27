@@ -42,9 +42,8 @@ public class BookingService {
         return bookingRepository.findBookingByAppUserId(userId);
     }
 
-    public List<LocalTime> getAvailableHours(LocalDate date) {
-        WorkingDay workingDay = workingDayRepository.findDayOfMonth(date);
-        if (workingDay == null) throw new WorkingDayNotFound();
+    public List<LocalTime> getAvailableHours(String date) {
+        WorkingDay workingDay = workingDayRepository.findById(date).orElseThrow(WorkingDayNotFound::new);
         // Horários já reservados
         ArrayList<LocalTime> bookedHours = bookingRepository.findBookingByWorkingDayId(workingDay.getId());
         // Lista dos horários disponíveis do dia selecionado

@@ -28,7 +28,7 @@ public class BookingController {
     }
 
     @GetMapping("/available-hours")
-    public ResponseEntity<List<LocalTime>> getAvailableHoursByDay(@RequestParam("day") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate day) {
+    public ResponseEntity<List<LocalTime>> getAvailableHoursByDay(@RequestParam("day") String day) {
         return ResponseEntity.ok(service.getAvailableHours(day));
     }
 
