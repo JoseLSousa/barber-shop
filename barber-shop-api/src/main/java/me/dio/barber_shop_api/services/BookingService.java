@@ -14,10 +14,10 @@ import me.dio.barber_shop_api.repository.AppUserRepository;
 import me.dio.barber_shop_api.repository.ServiceBShopRepository;
 import me.dio.barber_shop_api.repository.BookingRepository;
 import me.dio.barber_shop_api.repository.WorkingDayRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -59,9 +59,10 @@ public class BookingService {
         return availableHours;
     }
 
-    public void cancelBooking(String id) {
+    public ResponseEntity<Void> cancelBooking(String id) {
         bookingExists(id);
         bookingRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
     public ResponseBookingDTO createBooking(RequestBookingDTO body, HttpServletRequest request) {
