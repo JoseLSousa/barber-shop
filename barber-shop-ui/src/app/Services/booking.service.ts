@@ -13,4 +13,7 @@ export class BookingService {
   getBookings():Observable<any> {
     return this.http.get(`${this.apiUrl}/bookings`);
   }
+  getAvailableHours(dayOfMonth: string):Observable<any> {
+    return this.http.get(`${this.apiUrl}/bookings/available-hours?day=${dayOfMonth}`);
+  }
 }
