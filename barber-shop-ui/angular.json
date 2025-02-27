@@ -5,7 +5,7 @@
   "projects": {
     "barber-shop-ui": {
       "i18n":{
-        "sourceLocale": "pt-BR"
+        "sourceLocale": "pt"
       },
       "projectType": "application",
       "schematics": {
