@@ -21,4 +21,8 @@ export class BookingService {
   postBooking(body: PostBooking):Observable<string>{
     return this.http.post<string>(`${this.apiUrl}/bookings`, body);
   }
+
+  deleteBooking(id: string):Observable<void>{
+    return this.http.delete<void>(`${this.apiUrl}/bookings/${id}`);
+  }
 }
