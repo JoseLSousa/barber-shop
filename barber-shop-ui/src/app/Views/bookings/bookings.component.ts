@@ -4,6 +4,7 @@ import { MatTableModule } from "@angular/material/table";
 import { CommonModule } from '@angular/common';
 import { TimePipe } from '../../Pipes/time.pipe';
 import { RouterLink } from '@angular/router';
+import { Booking } from '../../Interfaces/booking';
 @Component({
   selector: 'app-bookings',
   imports: [CommonModule, MatTableModule, TimePipe, RouterLink],
@@ -11,7 +12,7 @@ import { RouterLink } from '@angular/router';
   styleUrl: './bookings.component.scss'
 })
 export class BookingsComponent implements OnInit {
-  myBookings: any[] = [];
+  myBookings: Booking[] = [];
   displayedColumns: string[] = ['service', 'dayOfMonth', 'time', 'price', 'options'];
   constructor(private bookingService: BookingService) { }
 
