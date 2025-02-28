@@ -17,6 +17,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 
 import me.dio.barber_shop_api.config.CorsConfig;
 
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -34,8 +36,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/services-barber-shop").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/services-barber-shop").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/services-barber-shop/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/services-barber-shop/**").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.POST,"/working-days").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/working-days/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/working-days/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
                         .cors(c -> c.configurationSource(CorsConfig))
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
