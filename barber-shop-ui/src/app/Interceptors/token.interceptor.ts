@@ -11,6 +11,5 @@ export const tokenInterceptor: HttpInterceptorFn = (req, next) => {
     })
     return next(clone);
   }
-  console.log("reste");
   return next(req);
 };

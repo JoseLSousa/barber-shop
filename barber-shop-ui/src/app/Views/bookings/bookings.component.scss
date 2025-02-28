@@ -1,0 +1,42 @@
+@use '@angular/material' as mat;
+
+.container {
+    background-color: #242424;
+
+    .page-title {
+        font-family: "Bebas Neue", serif;
+        letter-spacing: .09rem;
+        color: white;
+    }
+    .new-booking-button{
+      letter-spacing: .09rem;
+        font-family: "Lobster", serif;
+        color: white;
+        border: 2px solid #dbb042;
+        border-radius: 0;
+        &:hover{
+          background-color: #dbb042;
+          color: #242424;
+        }
+    }
+}
+
+.table-container {
+  th,td{
+    text-align: center;
+  }
+  @media (max-width: 768px) {
+    overflow-x: scroll;
+  }
+  @include mat.table-overrides((
+    background-color: rgb(24, 24, 24),
+    row-item-label-text-color: rgb(255, 255, 255),
+    header-headline-color: rgb(255, 255, 255),
+    header-headline-font: ("Bebas Neue", serif),
+    header-headline-size: 20px,
+    row-item-label-text-font: ("Lobster", serif),
+    row-item-outline-color: #dbb042,
+    header-headline-tracking: .2rem,
+    row-item-label-text-size: 18px
+    ));
+  }

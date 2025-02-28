@@ -1,0 +1,24 @@
+@use '@angular/material' as mat;
+
+.column {
+    background-color: #242424;
+
+}
+
+.stepper {
+    padding: 20px;
+
+}
+mat-form-field{
+    margin-top: 20px;
+}
+.custom-btn{
+    color: white;
+    border: 2px solid #dbb042;
+    border-radius: 0;
+    letter-spacing: .09rem;
+    font-family: "Lobster", serif;
+    &:hover{
+        background-color: #dbb042;
+    }
+}

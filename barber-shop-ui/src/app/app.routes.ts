@@ -5,6 +5,7 @@ import { BookingsComponent } from './Views/bookings/bookings.component';
 import { LoginComponent } from './Views/login/login.component';
 import { RegisterComponent } from './Views/register/register.component';
 import { BookingHandlerComponent } from './Views/booking-handler/booking-handler.component';
+import { authenticationGuard } from './Guards/authentication.guard';
 
 export const routes: Routes = [
     {
@@ -12,10 +13,10 @@ export const routes: Routes = [
             { path: '', redirectTo: 'home', pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
             {
-                path: 'agenda', children: [
+                path: 'agenda', canActivate: [authenticationGuard], children: [
                     { path: '', component: BookingsComponent },
                     {
-                        path: ':id', component: BookingHandlerComponent
+                        path: 'novo-agendamento', component: BookingHandlerComponent
                     }
                 ]
             },
