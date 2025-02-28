@@ -7,6 +7,7 @@ WORKDIR /app
 # Copia os arquivos necessários para a construção
 COPY . .
 
+RUN npm install -g npm@latest
 # Instalar as dependências do projeto
 RUN npm install
 
