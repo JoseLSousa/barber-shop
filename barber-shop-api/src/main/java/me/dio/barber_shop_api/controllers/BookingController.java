@@ -6,13 +6,11 @@ import me.dio.barber_shop_api.dtos.booking.RequestBookingDTO;
 import me.dio.barber_shop_api.dtos.booking.ResponseBookingDTO;
 import me.dio.barber_shop_api.model.Booking;
 import me.dio.barber_shop_api.services.BookingService;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -28,7 +26,7 @@ public class BookingController {
     }
 
     @GetMapping("/available-hours")
-    public ResponseEntity<List<LocalTime>> getAvailableHoursByDay(@RequestParam("day") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate day) {
+    public ResponseEntity<List<LocalTime>> getAvailableHoursByDay(@RequestParam("day") String day) {
         return ResponseEntity.ok(service.getAvailableHours(day));
     }
 
@@ -49,12 +47,7 @@ public class BookingController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> cancelBooking(@PathVariable String id) {
-        try {
-            service.cancelBooking(id);
-            return ResponseEntity.ok("Agendamento cancelado com sucesso!");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
-        }
+           return service.cancelBooking(id);
     }
 
 }

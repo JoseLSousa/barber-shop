@@ -14,10 +14,10 @@ import me.dio.barber_shop_api.repository.AppUserRepository;
 import me.dio.barber_shop_api.repository.ServiceBShopRepository;
 import me.dio.barber_shop_api.repository.BookingRepository;
 import me.dio.barber_shop_api.repository.WorkingDayRepository;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,9 +42,8 @@ public class BookingService {
         return bookingRepository.findBookingByAppUserId(userId);
     }
 
-    public List<LocalTime> getAvailableHours(LocalDate date) {
-        WorkingDay workingDay = workingDayRepository.findDayOfMonth(date);
-        if (workingDay == null) throw new WorkingDayNotFound();
+    public List<LocalTime> getAvailableHours(String date) {
+        WorkingDay workingDay = workingDayRepository.findById(date).orElseThrow(WorkingDayNotFound::new);
         // Horários já reservados
         ArrayList<LocalTime> bookedHours = bookingRepository.findBookingByWorkingDayId(workingDay.getId());
         // Lista dos horários disponíveis do dia selecionado
@@ -60,9 +59,10 @@ public class BookingService {
         return availableHours;
     }
 
-    public void cancelBooking(String id) {
+    public ResponseEntity<Void> cancelBooking(String id) {
         bookingExists(id);
         bookingRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
     public ResponseBookingDTO createBooking(RequestBookingDTO body, HttpServletRequest request) {
