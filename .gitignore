@@ -6,5 +6,6 @@ barber-shop-ui/package-lock.json
 
 barber-shop-api/.idea/
 barber-shop-api/target/
+barber-shop-api/src/main/resources/keystore/*
 
 
