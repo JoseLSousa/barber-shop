@@ -1,3 +1,3 @@
 export const environment = {
-    apiURL: "https://bshop-api.railway.internal:8443"
+    apiURL: "https://bshop-api:8443"
 };
