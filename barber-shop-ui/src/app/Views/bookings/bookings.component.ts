@@ -26,7 +26,6 @@ export class BookingsComponent implements OnInit {
 
   deleteBooking(bookingId: string) {
     if(confirm("Deseja realmente excluir?")){
-      console.log(bookingId);
       this.bookingService.deleteBooking(bookingId).subscribe({
         next: () => {
           this.myBookings = this.myBookings.filter(booking => booking.bookingId !== bookingId);
