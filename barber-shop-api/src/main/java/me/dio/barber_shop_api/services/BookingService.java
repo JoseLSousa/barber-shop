@@ -2,22 +2,17 @@ package me.dio.barber_shop_api.services;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
-import me.dio.barber_shop_api.dtos.booking.RequestBookingDTO;
-import me.dio.barber_shop_api.dtos.booking.RequestBookingListByUserDTO;
+import me.dio.barber_shop_api.dtos.booking.BookingDTO;
+import me.dio.barber_shop_api.dtos.booking.BookingListDTO;
 import me.dio.barber_shop_api.dtos.booking.ResponseBookingDTO;
 import me.dio.barber_shop_api.exceptions.*;
-import me.dio.barber_shop_api.model.AppUser;
-import me.dio.barber_shop_api.model.Booking;
-import me.dio.barber_shop_api.model.ServiceBShop;
-import me.dio.barber_shop_api.model.WorkingDay;
-import me.dio.barber_shop_api.repository.AppUserRepository;
+import me.dio.barber_shop_api.model.*;
 import me.dio.barber_shop_api.repository.ServiceBShopRepository;
 import me.dio.barber_shop_api.repository.BookingRepository;
-import me.dio.barber_shop_api.repository.WorkingDayRepository;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.awt.print.Book;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,80 +22,75 @@ import java.util.List;
 public class BookingService {
 
     private final BookingRepository bookingRepository;
-    private final WorkingDayRepository workingDayRepository;
+    private final WorkingDayService workingDayService;
+    private final ShiftService shiftService;
     private final TokenService tokenService;
-    private final AppUserRepository appUserRepository;
-    private final ServiceBShopRepository serviceBShopRepository;
+    private final AppUserService appUserService;
+    private final ServiceBShopService serviceBShopService;
 
     public Booking listById(String id) {
         return bookingRepository.findById(id)
                 .orElseThrow(BookingNotFound::new);
     }
 
-    public List<RequestBookingListByUserDTO> listByUserId(HttpServletRequest request) {
-        String userId = appUserExists(getEmailFromToken(request)).getId();
-        return bookingRepository.findBookingByAppUserId(userId);
+    public List<BookingListDTO> listByUser(HttpServletRequest request) {
+        String email = getEmailFromToken(request);
+        return bookingRepository.findBookingByAppUserId(appUserService.getUserByEmail(email).getId());
     }
 
-    public List<LocalTime> getAvailableHours(String date) {
-        WorkingDay workingDay = workingDayRepository.findById(date).orElseThrow(WorkingDayNotFound::new);
-        // Horários já reservados
-        ArrayList<LocalTime> bookedHours = bookingRepository.findBookingByWorkingDayId(workingDay.getId());
-        // Lista dos horários disponíveis do dia selecionado
+    public ArrayList<LocalTime> getAvailableHours(DayOfWeek day) {
+        String id = workingDayService.findByDayOfWeek(day);
+        List<LocalTime> alreadyBookedTimes = bookingRepository.findBookingsByWorkingDayId(id);
         ArrayList<LocalTime> availableHours = new ArrayList<>();
-        LocalTime currentTime = workingDay.getOpeningTime();
-
-        while (currentTime.isBefore(workingDay.getClosingTime().plusHours(1))) {
-            if (!bookedHours.contains(currentTime)) {
-                availableHours.add(currentTime);
+        for (LocalTime lt : verifyHours(id)) {
+            if (!alreadyBookedTimes.contains(lt)) {
+                availableHours.add(lt);
             }
-            currentTime = currentTime.plusHours(1);
         }
+
         return availableHours;
     }
 
-    public ResponseEntity<Void> cancelBooking(String id) {
-        bookingExists(id);
-        bookingRepository.deleteById(id);
-        return ResponseEntity.noContent().build();
-    }
 
-    public ResponseBookingDTO createBooking(RequestBookingDTO body, HttpServletRequest request) {
-        bookingExistsByTime(body.time()); // Verifica se já tem agendamento naquela hora
+    public ResponseBookingDTO createBooking(BookingDTO body, HttpServletRequest request) {
+        if (bookingRepository.existsByTime(body.time())) throw new BookingAlreadyExists();
         Booking newBooking = new Booking();
-        newBooking.setAppUser(appUserExists(getEmailFromToken(request)));
-        newBooking.setServiceBShop(serviceExists(body.serviceBShopId()));
+        newBooking.setAppUser(appUserService.getUserByEmail(getEmailFromToken(request)));
+        newBooking.setWorkingDay(workingDayService.findById(body.workingDayId()));
+        newBooking.setServiceBShop(serviceBShopService.getById(body.serviceBShopId()));
+        if (!verifyHours(body.workingDayId()).contains(body.time()))
+            throw new BookingOutOfWorkingTimeBounds();
+
         newBooking.setTime(body.time());
-        newBooking.setWorkingDay(workingDayExists(body.workingDayId(), body.time()));
         return ResponseBookingDTO.fromEntity(bookingRepository.save(newBooking));
 
     }
 
-    private void bookingExists(String id) {
-        if (!bookingRepository.existsById(id)) throw new BookingNotFound();
-    }
-
-    private void bookingExistsByTime(LocalTime time) {
-        if (bookingRepository.existsByTime(time)) throw new BookingAlreadyExists();
-    }
-
-    private WorkingDay workingDayExists(String id, LocalTime time) {
-        return workingDayRepository.findValidWorkingDay(id, time).orElseThrow(BookingOutOfWorkingTimeBounds::new);
-    }
-
-    private ServiceBShop serviceExists(String id) {
-        return serviceBShopRepository.findById(id).orElseThrow(ServiceBShopNotFound::new);
-    }
-
-    private AppUser appUserExists(String email) {
-        AppUser user = appUserRepository.findAppUserByEmail(email);
-        if (user == null) throw new UsernameNotFoundException("");
-        return user;
+    public ResponseEntity<Void> cancelBooking(String id) {
+        if(!bookingRepository.existsById(id)) throw new BookingNotFound();
+        bookingRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 
     private String getEmailFromToken(HttpServletRequest request) {
-        String token = request.getHeader("Authorization").split("Bearer ")[1];
+        String token = request.getHeader("Authorization").split(" ")[1];
         return tokenService.validateToken(token);
+
     }
+
+    private ArrayList<LocalTime> verifyHours(String id) {
+        List<Shift> shiftList = shiftService.getShiftsByWorkingDayId(id);
+        ArrayList<LocalTime> availableHours = new ArrayList<>();
+        LocalTime currentTime;
+        for (Shift s : shiftList) {
+            currentTime = s.getStartTime();
+            while (currentTime.isBefore(s.getEndTime())) {
+                availableHours.add(currentTime);
+                currentTime = currentTime.plusHours(1);
+            }
+        }
+        return availableHours;
+    }
+
 
 }
