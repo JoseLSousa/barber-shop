@@ -1,5 +1,6 @@
 package me.dio.barber_shop_api.repository;
 
+import me.dio.barber_shop_api.model.DayOfWeek;
 import me.dio.barber_shop_api.model.WorkingDay;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -15,16 +16,15 @@ import java.util.Optional;
 public interface WorkingDayRepository extends JpaRepository<WorkingDay, String> {
     Optional<WorkingDay> findById(String id);
 
-    @Query("SELECT wd FROM WorkingDay wd WHERE wd.dayOfMonth = :dayOfMonth")
-    WorkingDay findDayOfMonth(@Param("dayOfMonth") LocalDate dayOfMonth);
+    @Query(value = """
+            SELECT EXISTS (SELECT id FROM working_days
+            WHERE id = :id AND is_open = TRUE AS result)
+            """, nativeQuery = true)
+    boolean isOpen(@Param("id") String id);
 
-    @Query("""
-            SELECT wd FROM WorkingDay wd WHERE wd.id = :id
-            AND :time BETWEEN wd.openingTime AND wd.closingTime
-            """)
-    Optional<WorkingDay> findValidWorkingDay(@Param("id") String id, @Param("time") LocalTime time);
+    boolean existsByDayOfWeek(DayOfWeek dayOfWeek);
 
-    boolean existsByDayOfMonth(LocalDate dayOfMonth);
+    WorkingDay findByDayOfWeek(DayOfWeek dayOfWeek);
 
     boolean existsById(String id);
 
