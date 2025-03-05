@@ -42,4 +42,8 @@ public class AppUserService {
         repository.save(user);
     }
 
+    public AppUser getUserByEmail(String email) {
+        return repository.findAppUserByEmail(email);
+    }
+
 }
