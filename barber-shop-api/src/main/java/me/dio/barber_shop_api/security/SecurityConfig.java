@@ -15,12 +15,19 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import me.dio.barber_shop_api.config.CorsConfig;
+
+import java.util.List;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     @Autowired
     SecurityFilter securityFilter;
+
+    @Autowired
+    CorsConfig CorsConfig;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -29,8 +36,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/bookings").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/services-barber-shop").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/services-barber-shop/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/services-barber-shop/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST,"/working-days").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT,"/working-days/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE,"/working-days/**").hasRole("ADMIN")
                         .anyRequest().authenticated())
+                        .cors(c -> c.configurationSource(CorsConfig))
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
