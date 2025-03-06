@@ -1,13 +1,13 @@
 package me.dio.barber_shop_api.dtos.booking;
 
-import java.time.LocalDate;
+import me.dio.barber_shop_api.model.DayOfWeek;
 import java.time.LocalTime;
 
 
-public record RequestBookingListByUserDTO(
+public record BookingListDTO(
         String bookingId,
         LocalTime time,
-        LocalDate dayOfMonth,
+        DayOfWeek dayOfWeek,
         String serviceName,
         Integer price) {
 }

@@ -2,16 +2,17 @@ package me.dio.barber_shop_api.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.AllArgsConstructor;
-import me.dio.barber_shop_api.dtos.booking.RequestBookingDTO;
+import me.dio.barber_shop_api.dtos.booking.BookingDTO;
+import me.dio.barber_shop_api.dtos.booking.BookingListDTO;
 import me.dio.barber_shop_api.dtos.booking.ResponseBookingDTO;
 import me.dio.barber_shop_api.model.Booking;
+import me.dio.barber_shop_api.model.DayOfWeek;
 import me.dio.barber_shop_api.services.BookingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-import java.time.LocalTime;
 import java.util.List;
 
 @RestController
@@ -21,12 +22,12 @@ public class BookingController {
     private final BookingService service;
 
     @PostMapping
-    public ResponseEntity<ResponseBookingDTO> createBooking(@RequestBody RequestBookingDTO body, HttpServletRequest request) {
+    public ResponseEntity<ResponseBookingDTO> createBooking(@RequestBody BookingDTO body, HttpServletRequest request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.createBooking(body, request));
     }
 
     @GetMapping("/available-hours")
-    public ResponseEntity<List<LocalTime>> getAvailableHoursByDay(@RequestParam("day") String day) {
+    public ResponseEntity<List<?>> getAvailableHoursByDay(@RequestParam("day") DayOfWeek day) {
         return ResponseEntity.ok(service.getAvailableHours(day));
     }
 
@@ -41,8 +42,8 @@ public class BookingController {
     }
 
     @GetMapping
-    public ResponseEntity<?> listByUserId(HttpServletRequest request) {
-        return ResponseEntity.ok(service.listByUserId(request));
+    public ResponseEntity<List<BookingListDTO>> listByUser(HttpServletRequest request) {
+        return ResponseEntity.ok(service.listByUser(request));
     }
 
     @DeleteMapping("/{id}")

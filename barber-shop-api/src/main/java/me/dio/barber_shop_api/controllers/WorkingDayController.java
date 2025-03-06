@@ -31,19 +31,19 @@ public class WorkingDayController {
 
     @PostMapping
     public ResponseEntity<WorkingDay> create(@RequestBody RequestWorkingDayDTO body) {
-        return new ResponseEntity<WorkingDay>(service.create(body.toEntity()), HttpStatus.CREATED);
+        return new ResponseEntity<WorkingDay>(service.create(body), HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<WorkingDay> update(@PathVariable String id, @Valid @RequestBody RequestWorkingDayDTO body) {
+//    @PutMapping("/{id}")
+//    public ResponseEntity<WorkingDay> update(@PathVariable String id, @Valid @RequestBody RequestWorkingDayDTO body) {
+//
+//        return new ResponseEntity<WorkingDay>(service.update(id, body.toEntity()), HttpStatus.OK);
+//    }
 
-        return new ResponseEntity<WorkingDay>(service.update(id, body.toEntity()), HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable String id) {
-        System.out.printf(id);
-        service.deleteWorkingDay(id);
-        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-    }
+//    @DeleteMapping("/{id}")
+//    public ResponseEntity<Void> delete(@PathVariable String id) {
+//        System.out.printf(id);
+//        service.deleteWorkingDay(id);
+//        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+//    }
 }

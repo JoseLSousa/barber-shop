@@ -2,14 +2,20 @@ package me.dio.barber_shop_api.services;
 
 import lombok.AllArgsConstructor;
 
+import me.dio.barber_shop_api.dtos.shift.ShiftDTO;
+import me.dio.barber_shop_api.dtos.workingDay.RequestWorkingDayDTO;
 import me.dio.barber_shop_api.exceptions.EmptyBodyPayload;
 import me.dio.barber_shop_api.exceptions.WorkingDayAlreadyExists;
+import me.dio.barber_shop_api.exceptions.WorkingDayIsClosed;
 import me.dio.barber_shop_api.exceptions.WorkingDayNotFound;
+import me.dio.barber_shop_api.model.DayOfWeek;
+import me.dio.barber_shop_api.model.Shift;
 import me.dio.barber_shop_api.model.WorkingDay;
 import me.dio.barber_shop_api.repository.WorkingDayRepository;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -17,6 +23,8 @@ import java.util.List;
 public class WorkingDayService {
 
     private final WorkingDayRepository repository;
+
+    private final ShiftService shiftService;
 
     public List<WorkingDay> findAll() {
         return repository.findAll();
@@ -26,34 +34,35 @@ public class WorkingDayService {
         return repository.findById(id).orElseThrow(WorkingDayNotFound::new);
     }
 
-    public WorkingDay create(WorkingDay body) {
-        if (workingDayExists(body.getDayOfMonth())) throw new WorkingDayAlreadyExists();
-        return repository.save(body);
-    }
+    public WorkingDay create(RequestWorkingDayDTO body) {
+        if (repository.existsByDayOfWeek(body.dayOfWeek())) throw new WorkingDayAlreadyExists();
+        if (body.shiftList().isEmpty()) throw new EmptyBodyPayload();
 
-    public WorkingDay update(String id, WorkingDay workingDay) {
-        if (!repository.existsById(id)) throw new WorkingDayNotFound();
-        if (bodyIsNullOrEmpty(workingDay)) throw new EmptyBodyPayload();
-        workingDay.setId(id);
+        WorkingDay workingDay = body.toEntity();
+
+        List<Shift> shiftList = new ArrayList<>();
+
+        for (ShiftDTO s : body.shiftList()) {
+            Shift newShift = s.toEntity(workingDay);
+            if (shiftService.existsShiftConflict(newShift, body.dayOfWeek()))
+                throw new WorkingDayAlreadyExists();
+            shiftList.add(shiftService.createShift(s.toEntity(workingDay)));
+        }
+        workingDay.setShiftList(shiftList);
         return repository.save(workingDay);
     }
 
-    public void deleteWorkingDay(String id) {
-        WorkingDay workingDay = repository.findById(id).orElseThrow(WorkingDayNotFound::new);
-        System.out.printf(workingDay.toString());
-        repository.delete(workingDay);
+    // Verifica se o dia selecionado está aberto
+    public void isOpen(String id) {
+        if (!repository.isOpen(id)) throw new WorkingDayIsClosed();
     }
 
-    private boolean bodyIsNullOrEmpty(WorkingDay body) {
-        return (body == null) ? true : false;
+    // Busca o working pelo dia da semana e retorna id
+    public String findByDayOfWeek(DayOfWeek day) {
+        String id = repository.findByDayOfWeek(day).getId();
+        if (id.isEmpty()) throw new WorkingDayNotFound();
+        return id;
     }
 
-    private boolean workingDayExists(LocalDate dayOfWeek) {
-        return repository.existsByDayOfMonth(dayOfWeek);
-    }
-
-    private boolean workingDayExistsById(String id) {
-        return repository.existsById(id);
-    }
 
 }

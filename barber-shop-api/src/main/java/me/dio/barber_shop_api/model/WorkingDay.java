@@ -2,6 +2,7 @@ package me.dio.barber_shop_api.model;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -19,13 +20,14 @@ public class WorkingDay {
     private String id;
 
     @Column(nullable = false, unique = true)
-    private LocalDate dayOfMonth;
+    private DayOfWeek dayOfWeek;
 
     @Column(nullable = false)
-    private LocalTime openingTime;
+    private boolean isOpen;
 
-    @Column(nullable = false)
-    private LocalTime closingTime;
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JoinColumn(name = "workingDay_id", referencedColumnName = "id")
+    private List<Shift> shiftList;
 
 
 }
