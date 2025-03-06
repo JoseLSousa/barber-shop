@@ -1,0 +1,57 @@
+networks:
+  barber-shop-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 10.254.0.0/29
+
+services:
+  postgres-db:
+    image: postgres
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 10s
+      retries: 5
+      start_period: 10s
+    networks:
+      barber-shop-network:
+        ipv4_address: 10.254.0.2
+
+  spring-backend-bshop:
+    build:
+      context: .
+      dockerfile: barber-shop-api/Dockerfile
+    ports:
+      - "8443:8443"
+    environment:
+      - DB_ADDRESS=
+      - DB_PORT=
+      - DB_NAME=
+      - DB_USERNAME=
+      - DB_PASSWORD=
+      - JWT_SECRET=
+      - CORS_ORIGIN=
+      - SERVER_PORT=
+      - KEY_STORE=
+      - SSL_PASSWORD=
+      - CERT_NAME=
+    depends_on:
+      postgres-db:
+        condition: service_healthy
+    networks:
+      barber-shop-network:
+        ipv4_address: 10.254.0.3
+  angular-nginx-frontend-bshop:
+    build:
+      context: .
+      dockerfile: barber-shop-ui/Dockerfile
+    ports:
+      - "8080:80"
+    networks:
+      barber-shop-network:
+        ipv4_address: 10.254.0.4
