@@ -14,7 +14,6 @@ import me.dio.barber_shop_api.model.WorkingDay;
 import me.dio.barber_shop_api.repository.WorkingDayRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,7 +34,8 @@ public class WorkingDayService {
     }
 
     public WorkingDay create(RequestWorkingDayDTO body) {
-        if (repository.existsByDayOfWeek(body.dayOfWeek())) throw new WorkingDayAlreadyExists();
+        DayOfWeek day = DayOfWeek.getDayOfWeek(body.dayOfWeek());
+        if (repository.existsByDayOfWeek(day)) throw new WorkingDayAlreadyExists();
         if (body.shiftList().isEmpty()) throw new EmptyBodyPayload();
 
         WorkingDay workingDay = body.toEntity();
@@ -44,7 +44,7 @@ public class WorkingDayService {
 
         for (ShiftDTO s : body.shiftList()) {
             Shift newShift = s.toEntity(workingDay);
-            if (shiftService.existsShiftConflict(newShift, body.dayOfWeek()))
+            if (shiftService.existsShiftConflict(newShift, day))
                 throw new WorkingDayAlreadyExists();
             shiftList.add(shiftService.createShift(s.toEntity(workingDay)));
         }
