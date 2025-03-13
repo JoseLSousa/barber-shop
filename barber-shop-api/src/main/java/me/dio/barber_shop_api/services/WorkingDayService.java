@@ -36,7 +36,7 @@ public class WorkingDayService {
     public WorkingDay create(RequestWorkingDayDTO body) {
         DayOfWeek day = DayOfWeek.getDayOfWeek(body.dayOfWeek());
         if (repository.existsByDayOfWeek(day)) throw new WorkingDayAlreadyExists();
-        if (body.shiftList().isEmpty()) throw new EmptyBodyPayload();
+        if (body.isOpen() && body.shiftList().isEmpty()) throw new EmptyBodyPayload();
 
         WorkingDay workingDay = body.toEntity();
 
