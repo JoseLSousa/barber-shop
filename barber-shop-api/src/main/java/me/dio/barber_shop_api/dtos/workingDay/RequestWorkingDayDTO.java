@@ -8,11 +8,11 @@ import me.dio.barber_shop_api.model.WorkingDay;
 import java.util.List;
 
 public record RequestWorkingDayDTO(
-        DayOfWeek dayOfWeek,
+        Integer dayOfWeek,
         boolean isOpen,
         List<ShiftDTO> shiftList) {
 
     public WorkingDay toEntity() {
-        return new WorkingDay(null, dayOfWeek, isOpen, null);
+        return new WorkingDay(null, DayOfWeek.getDayOfWeek(dayOfWeek), isOpen, null);
     }
 }
