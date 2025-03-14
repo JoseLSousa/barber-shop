@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +22,7 @@ public class WorkingDay {
 
     @Column(nullable = false, unique = true)
     private DayOfWeek dayOfWeek;
-
+    @JsonProperty("isOpen")
     @Column(nullable = false)
     private boolean isOpen;
 
