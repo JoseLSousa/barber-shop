@@ -26,7 +26,7 @@ public class WorkingDay {
     @Column(nullable = false)
     private boolean isOpen;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     @JoinColumn(name = "workingDay_id", referencedColumnName = "id")
     private List<Shift> shiftList;
 

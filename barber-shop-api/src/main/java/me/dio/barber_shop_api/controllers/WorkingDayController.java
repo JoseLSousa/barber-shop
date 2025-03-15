@@ -34,11 +34,11 @@ public class WorkingDayController {
         return new ResponseEntity<WorkingDay>(service.create(body), HttpStatus.CREATED);
     }
 
-//    @PutMapping("/{id}")
-//    public ResponseEntity<WorkingDay> update(@PathVariable String id, @Valid @RequestBody RequestWorkingDayDTO body) {
-//
-//        return new ResponseEntity<WorkingDay>(service.update(id, body.toEntity()), HttpStatus.OK);
-//    }
+    @PutMapping("/{id}")
+    public ResponseEntity<WorkingDay> update(@PathVariable String id, @Valid @RequestBody RequestWorkingDayDTO body) {
+
+        return new ResponseEntity<WorkingDay>(service.update(id, body), HttpStatus.OK);
+    }
 
 //    @DeleteMapping("/{id}")
 //    public ResponseEntity<Void> delete(@PathVariable String id) {

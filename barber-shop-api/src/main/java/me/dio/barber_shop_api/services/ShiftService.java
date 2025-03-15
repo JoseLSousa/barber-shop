@@ -27,4 +27,12 @@ public class ShiftService {
     public List<Shift> getShiftsByWorkingDayId(String id){
         return repository.findByWorkingDayId(id);
     }
+
+    public Shift getShiftById(String id) {
+        return repository.findById(id).orElse(null);
+    }
+
+    public void saveShift(Shift shift) {
+        repository.save(shift);
+    }
 }

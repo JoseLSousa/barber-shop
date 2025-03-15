@@ -5,8 +5,8 @@ import me.dio.barber_shop_api.model.WorkingDay;
 
 import java.time.LocalTime;
 
-public record ShiftDTO(LocalTime startTime, LocalTime endTime) {
-    public Shift toEntity(WorkingDay workingDayId){
-        return new Shift(null, startTime, endTime);
+public record ShiftDTO(String id,LocalTime startTime, LocalTime endTime) {
+    public Shift toEntity(WorkingDay workingDay){
+        return new Shift(id, startTime, endTime, workingDay);
     }
 }
