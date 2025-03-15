@@ -1,6 +1,8 @@
+import { Shift } from "./shift"
+
 export interface WorkingDay {
-    id: string
-    dayOfMonth: string
-    openingTime: string
-    closingTime: string
+    id?: string
+    dayOfWeek: string
+    isOpen: boolean
+    shiftList: Shift[]
 }
