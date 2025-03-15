@@ -14,4 +14,12 @@ export class WorkingDaysService {
   getWorkingDays():Observable<WorkingDay[]>{
     return this.http.get<WorkingDay[]>(`${this.apiUrl}/working-days`)
   }
+
+  postWorkingDay(wd: WorkingDay): Observable<WorkingDay>{
+    return this.http.post<WorkingDay>(`${this.apiUrl}/working-days`, wd)
+  }
+
+  putWorkingDay(id: string, wd: WorkingDay): Observable<WorkingDay>{
+    return this.http.put<WorkingDay>(`${this.apiUrl}/working-days/${id}`, wd)
+  }
 }
