@@ -27,7 +27,7 @@ public class BookingController {
     }
 
     @GetMapping("/available-hours")
-    public ResponseEntity<List<?>> getAvailableHoursByDay(@RequestParam("day") DayOfWeek day) {
+    public ResponseEntity<List<?>> getAvailableHoursByDay(@RequestParam("day") Integer day) {
         return ResponseEntity.ok(service.getAvailableHours(day));
     }
 

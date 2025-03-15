@@ -1,5 +1,6 @@
 package me.dio.barber_shop_api.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -23,5 +24,10 @@ public class Shift {
 
     @Column(nullable = false)
     private LocalTime endTime;
+
+    @ManyToOne
+    @JoinColumn(name = "workingDay_id", referencedColumnName = "id")
+    @JsonIgnore
+    private WorkingDay workingDay;
 
 }

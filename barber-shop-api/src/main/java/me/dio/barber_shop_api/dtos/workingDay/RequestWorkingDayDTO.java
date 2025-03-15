@@ -3,8 +3,10 @@ package me.dio.barber_shop_api.dtos.workingDay;
 
 import me.dio.barber_shop_api.dtos.shift.ShiftDTO;
 import me.dio.barber_shop_api.model.DayOfWeek;
+import me.dio.barber_shop_api.model.Shift;
 import me.dio.barber_shop_api.model.WorkingDay;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public record RequestWorkingDayDTO(
