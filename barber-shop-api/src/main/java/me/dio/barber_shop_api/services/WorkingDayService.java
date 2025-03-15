@@ -59,41 +59,33 @@ public class WorkingDayService {
         WorkingDay existingDay = findById(id);
         existingDay.setDayOfWeek(DayOfWeek.getDayOfWeek(body.dayOfWeek()));
         existingDay.setOpen(body.isOpen());
+        List<Shift> existingShifts = shiftService.getShiftsByWorkingDayId(id);
 
-        List<Shift> existingShifts = existingDay.getShiftList();
-        List<ShiftDTO> newShifts = body.shiftList();
+        if (existingShifts.size() <= body.shiftList().size()) {
+            for (int i = 0; i < body.shiftList().size(); i++) {
+                Shift shift = body.shiftList().get(i).toEntity(existingDay);
 
-        // Atualizar ou adicionar turnos
-        for (ShiftDTO shiftDTO : newShifts) {
-            Shift shift = shiftDTO.toEntity(existingDay);
-            if (shift.getId() == null) {
-                shiftService.createShift(shift);
-                existingShifts.add(shift);
-            } else {
-                Shift existingShift = shiftService.getShiftById(shift.getId());
-                if (existingShift != null) {
-                    existingShift.setStartTime(shift.getStartTime());
-                    existingShift.setEndTime(shift.getEndTime());
-                    existingShift.setWorkingDay(existingDay);
-                    shiftService.saveShift(existingShift);
+                if (i < existingShifts.size() && existingShifts.get(i).getId().equals(shift.getId())) {
+                    shift.setStartTime(body.shiftList().get(i).startTime());
+                    shift.setEndTime(body.shiftList().get(i).endTime());
+                    shiftService.saveShift(shift);
                 } else {
-                    shiftService.createShift(shift);
-                    existingShifts.add(shift);
+                    createShiftWithValidation(body.shiftList().get(i), existingDay, existingDay.getDayOfWeek());
+                }
+            }
+        } else {
+            for (Shift existingShift : existingShifts) {
+                if (!body.shiftList().stream().anyMatch(s -> s.id().equals(existingShift.getId()))) {
+                    shiftService.deleteShift(existingShift.getId());
                 }
             }
         }
-
-    // Remover turnos que não estão na nova lista
-    existingShifts.removeIf(shift -> newShifts.stream()
-            .noneMatch(dto -> dto.id() != null && dto.id().equals(shift.getId())));
-
-    existingDay.setShiftList(existingShifts);
-    return repository.save(existingDay);
-}
+        return repository.save(existingDay);
+    }
 
     @Transactional(readOnly = true)
     public void isOpen(String id) {
-        if (!repository.isOpen(id)) {
+        if (!repository.existsByIdAndIsOpenTrue(id)) {
             throw new WorkingDayIsClosed();
         }
     }
@@ -103,6 +95,16 @@ public class WorkingDayService {
         return Optional.ofNullable(repository.findByDayOfWeek(day))
                 .map(WorkingDay::getId)
                 .orElseThrow(WorkingDayNotFound::new);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Integer> getOpenDays() {
+        return repository.findDayOfWeekByIsOpenTrue();
+    }
+
+    public void delete(String id){
+        if(!repository.existsById(id))throw new WorkingDayNotFound();
+        repository.deleteById(id);
     }
 
     private Shift createShiftWithValidation(ShiftDTO shiftDTO, WorkingDay workingDay, DayOfWeek day) {

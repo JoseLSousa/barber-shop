@@ -21,29 +21,34 @@ public class WorkingDayController {
 
     @GetMapping
     public ResponseEntity<List<WorkingDay>> getAll() {
-        return new ResponseEntity<List<WorkingDay>>(service.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(service.findAll(), HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<WorkingDay> getById(@PathVariable String id) {
-        return new ResponseEntity<WorkingDay>(service.findById(id), HttpStatus.OK);
+        return new ResponseEntity<>(service.findById(id), HttpStatus.OK);
+    }
+
+    @GetMapping("/open-days")
+    public ResponseEntity<List<Integer>> getOpenDays() {
+        return new ResponseEntity<>(service.getOpenDays(), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<WorkingDay> create(@RequestBody RequestWorkingDayDTO body) {
-        return new ResponseEntity<WorkingDay>(service.create(body), HttpStatus.CREATED);
+        return new ResponseEntity<>(service.create(body), HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<WorkingDay> update(@PathVariable String id, @Valid @RequestBody RequestWorkingDayDTO body) {
 
-        return new ResponseEntity<WorkingDay>(service.update(id, body), HttpStatus.OK);
+        return new ResponseEntity<>(service.update(id, body), HttpStatus.OK);
     }
 
-//    @DeleteMapping("/{id}")
-//    public ResponseEntity<Void> delete(@PathVariable String id) {
-//        System.out.printf(id);
-//        service.deleteWorkingDay(id);
-//        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
-//    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> delete(@PathVariable String id) {
+        System.out.printf(id);
+        service.delete(id);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

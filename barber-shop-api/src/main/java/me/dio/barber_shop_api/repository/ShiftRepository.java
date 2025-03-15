@@ -29,4 +29,6 @@ public interface ShiftRepository extends JpaRepository<Shift, String> {
             SELECT * FROM shifts WHERE working_day_id = :id
             """, nativeQuery = true)
     List<Shift> findByWorkingDayId(@Param("id") String id);
+
+    List<Shift> findByWorkingDayDayOfWeek(DayOfWeek day);
 }

@@ -38,8 +38,8 @@ public class BookingService {
         return bookingRepository.findBookingByAppUserId(appUserService.getUserByEmail(email).getId());
     }
 
-    public ArrayList<LocalTime> getAvailableHours(DayOfWeek day) {
-        String id = workingDayService.findByDayOfWeek(day);
+    public ArrayList<LocalTime> getAvailableHours(Integer day) {
+        String id = workingDayService.findByDayOfWeek(DayOfWeek.getDayOfWeek(day));
         List<LocalTime> alreadyBookedTimes = bookingRepository.findBookingsByWorkingDayId(id);
         ArrayList<LocalTime> availableHours = new ArrayList<>();
         for (LocalTime lt : verifyHours(id)) {
