@@ -1,0 +1,82 @@
+<div id="mySidenav" class="sidenav" [ngClass]="opened ? 'open' : ''">
+    <div class="p-3">
+        <div class="sidebar-header d-flex align-items-center gap-3">
+            <button class="btn bi bi-chevron-bar-right" (click)="toggleEvent.emit()"></button>
+            <span class="fs-2">{{mode == 'add'? 'Adicionar': 'Editar'}}</span>
+        </div>
+        <div class="sidebar-body mt-2">
+            <ng-container *ngIf="currentPage == 'horarios-funcionamento'">
+                <form [formGroup]="workingDayForm">
+                    <mat-form-field appearance="outline" class="w-100 mt-3">
+                        <mat-label>Dia da semana</mat-label>
+                        <mat-select formControlName="dayOfWeek" class="mb-0">
+                            <mat-option *ngFor="let day of daysOfWeek; let i = index" [value]="i">{{ day }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-100 mt-3">
+                        <mat-label>Status</mat-label>
+                        <mat-select formControlName="isOpen" class="mb-0">
+                            <mat-option [value]="true">Aberto</mat-option>
+                            <mat-option [value]="false">Fechado</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <hr class="mt-0">
+                    <div class="d-flex align-items-center justify-content-between mb-3">
+                        <h4>Turnos</h4>
+                        <button type="button" class="btn bi bi-plus-lg" (click)="addShift()"
+                            *ngIf="this.shifts.length != 3"></button>
+                    </div>
+
+                    <div formArrayName="shiftList">
+                        <div class="shift" *ngFor="let shift of shifts.controls; let i = index" [formGroupName]="i">
+                            <div class="mb-2 d-flex justify-content-between align-items-center">
+                                <span>{{ i + 1 }}º Turno</span>
+                                <button class="btn bi bi bi-trash" (click)="removeShift(i)"></button>
+                            </div>
+
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>Abertura</mat-label>
+                                <input matInput type="text" formControlName="startTime" mask="00:00"
+                                    placeholder="00:00">
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline" class="w-100 mb-0">
+                                <mat-label>Fechamento</mat-label>
+                                <input type="text" matInput formControlName="endTime" mask="00:00" placeholder="00:00">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </form>
+                <div class="d-flex gap-2 mt-2">
+                    <button class="btn" (click)="onSubmit()"
+                        [disabled]="workingDayForm.invalid || (shifts.length == 0 && workingDayForm.get('isOpen')?.value)">{{this.mode
+                        == 'add'? 'Adicionar': 'Salvar'}}</button>
+                    <button class="btn" (click)="workingDayForm.reset(); this.shifts.clear()">Limpar</button>
+                    <button class="btn" (click)="deleteWorkingDayMethod()" *ngIf="this.mode === 'edit'">Excluir</button>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="currentPage == 'servicos'">
+                <form [formGroup]="serviceForm">
+                    <mat-form-field appearance="outline" class="w-100 mt-3">
+                        <mat-label>Nome</mat-label>
+                        <input matInput formControlName="name" placeholder="Nome do serviço">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-100 mt-3">
+                        <mat-label>Nome</mat-label>
+                        <input matInput formControlName="description" placeholder="Descrição do serviço">
+                    </mat-form-field>
+                    <mat-form-field appearance="outline" class="w-100 mt-3">
+                        <mat-label>Preço</mat-label>
+                        <input matInput formControlName="price" placeholder="Preço do serviço" mask="separator.2" separatorLimit="1000" [leadZero]="true">
+                    </mat-form-field>
+                    <div class="d-flex gap-2 mt-2">
+                        <button class="btn" (click)="onSubmit()"
+                            [disabled]="serviceForm.invalid">{{this.mode == 'add'? 'Adicionar': 'Salvar'}}</button>
+                        <button class="btn" (click)="serviceForm.reset()">Limpar</button>
+                        <button class="btn" *ngIf="this.mode === 'edit'" >Excluir</button>
+                    </div>
+                </form>
+            </ng-container>
+        </div>
+    </div>
+</div>

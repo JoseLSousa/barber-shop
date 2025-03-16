@@ -1,0 +1,61 @@
+/* The side navigation menu */
+.sidenav {
+    color: white;
+    height: 100%;
+    /* 100% Full-height */
+    width: 0;
+    /* 0 width - change this with JavaScript */
+    position: fixed;
+    /* Stay in place */
+    z-index: 5;
+    /* Stay on top */
+    top: 0;
+    right: 0;
+    background-color: #242424;
+    /* Black*/
+    overflow-x: hidden;
+    /* Disable horizontal scroll */
+
+    transition: 0.3s;
+
+    .sidebar-header {
+        font-family: "Bebas Neue", serif;
+        letter-spacing: 0.09rem;
+    }
+
+    .btn {
+
+        letter-spacing: .09rem;
+        font-family: "Lobster", serif;
+        color: white;
+        border: 2px solid #dbb042;
+        border-radius: 0;
+
+        &:hover {
+            background-color: #dbb042;
+            color: #242424;
+        }
+    }
+    .shift{
+        padding: 20px 10px 0 10px;
+        border: 1px solid white;
+        border-radius: 5px;
+        margin-bottom: 5px;
+    }
+}
+
+.open {
+    width: 450px;
+}
+
+
+@media screen and (max-height: 450px) {
+    .sidenav {
+        padding-top: 15px;
+    }
+
+    .sidenav a {
+        font-size: 18px;
+    }
+}
+
