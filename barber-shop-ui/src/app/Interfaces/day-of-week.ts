@@ -1,9 +1,9 @@
 export enum DayOfWeek {
-    Segunda = 'Segunda',
-    Terca = 'Terça',
-    Quarta = 'Quarta',
-    Quinta = 'Quinta',
-    Sexta = 'Sexta',
-    Sabado = 'Sábado',
-    Domingo = 'Domingo'
+    SEGUNDA = 'Segunda',
+    TERCA = 'Terça',
+    QUARTA = 'Quarta',
+    QUINTA = 'Quinta',
+    SEXTA = 'Sexta',
+    SABADO = 'Sábado',
+    DOMINGO = 'Domingo'
 }
