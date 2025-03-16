@@ -40,7 +40,7 @@ export class BookingHandlerComponent implements OnInit {
 
   ngOnInit(): void {
     this.workingDays.getWorkingDays().subscribe(res => this.workingDaysList = res)
-    this.serviceBShop.getServiceBShops().subscribe(res => this.servicesBShop = res)
+    this.serviceBShop.getServicesBShop().subscribe(res => this.servicesBShop = res)
   }
 
   onChange() {
