@@ -22,4 +22,8 @@ export class WorkingDaysService {
   putWorkingDay(id: string, wd: WorkingDay): Observable<WorkingDay>{
     return this.http.put<WorkingDay>(`${this.apiUrl}/working-days/${id}`, wd)
   }
+
+  deleteWorkingDay(id: string): Observable<void>{
+    return this.http.delete<void>(`${this.apiUrl}/working-days/${id}`)
+  }
 }
