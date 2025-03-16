@@ -11,7 +11,10 @@ export class ServiceBShopService {
   private apiUrl = environment.apiURL
   constructor(private http: HttpClient) { }
 
-  getServiceBShops(): Observable<ServiceBShop[]> {
+  getServicesBShop(): Observable<ServiceBShop[]> {
     return this.http.get<ServiceBShop[]>(`${this.apiUrl}/services-barber-shop`);
+  }
+  postServiceBShop(service: ServiceBShop): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/services-barber-shop`, service)
   }
 }
