@@ -73,7 +73,7 @@
                         <button class="btn" (click)="onSubmit()"
                             [disabled]="serviceForm.invalid">{{this.mode == 'add'? 'Adicionar': 'Salvar'}}</button>
                         <button class="btn" (click)="serviceForm.reset()">Limpar</button>
-                        <button class="btn" *ngIf="this.mode === 'edit'" >Excluir</button>
+                        <button class="btn" (click)="deleteServiceBshopMethod()" *ngIf="this.mode === 'edit'">Excluir</button>
                     </div>
                 </form>
             </ng-container>

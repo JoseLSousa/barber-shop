@@ -17,4 +17,12 @@ export class ServiceBShopService {
   postServiceBShop(service: ServiceBShop): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/services-barber-shop`, service)
   }
+
+  putServiceBshop(serviceId: string, service: ServiceBShop): Observable<void> {
+    return this.http.put<void>(`${this.apiUrl}/services-barber-shop/${serviceId}`, service)
+  }
+
+  deleteServiceBShop(id: string): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/services-barber-shop/${id}`)
+  }
 }

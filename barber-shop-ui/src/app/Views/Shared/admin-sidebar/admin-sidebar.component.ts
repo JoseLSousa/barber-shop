@@ -35,7 +35,7 @@ export class AdminSidebarComponent implements OnInit, OnChanges {
   serviceForm: FormGroup
   currentPage: string = ''
   selectedTime: string = ''
-  constructor(private fb: FormBuilder, private route: ActivatedRoute, private workingDaysService: WorkingDaysService, private bshopSerivce: ServiceBShopService) {
+  constructor(private fb: FormBuilder, private route: ActivatedRoute, private workingDaysService: WorkingDaysService, private bshopService: ServiceBShopService) {
     this.workingDayForm = this.fb.group({
       dayOfWeek: ['', Validators.required],
       isOpen: ['', Validators.required],
@@ -188,7 +188,7 @@ export class AdminSidebarComponent implements OnInit, OnChanges {
       price: this.serviceForm.get('price')?.value * 10
     }
 
-    this.bshopSerivce.postServiceBShop(form).subscribe({
+    this.bshopService.postServiceBShop(form).subscribe({
       next: () => {
         alert('Serviço cadastrado com sucesso');
         this.fetchupdates.emit();
@@ -200,7 +200,22 @@ export class AdminSidebarComponent implements OnInit, OnChanges {
   }
 
   private async putServiceBshopMethod() {
+    const form: ServiceBShop = {
+      name: this.serviceForm.get('name')?.value,
+      description: this.serviceForm.get('description')?.value,
+      price: this.serviceForm.get('price')?.value * 10
+    }
 
+    this.bshopService.putServiceBshop(this.selectedItem.id, form).subscribe({
+      next: () => {
+        this.fetchupdates.emit();
+        this.toggleEvent.emit();
+        alert('Serviço atualizado com sucesso')
+      },
+      error(er) {
+        alert(er.error.message)
+      }
+    })
   }
 
   private async postWorkingDayMethod(form: WorkingDay) {
@@ -220,7 +235,22 @@ export class AdminSidebarComponent implements OnInit, OnChanges {
       this.workingDaysService.deleteWorkingDay(this.selectedItem.id).subscribe({
         next: () => {
           this.fetchupdates.emit();
+          this.toggleEvent.emit();
           alert('Horário de funcionamento excluído com sucesso')
+        },
+        error(er) {
+          alert(er.error.message)
+        }
+      })
+    }
+  }
+  async deleteServiceBshopMethod() {
+    if (confirm('Deseja realmente excluir este serviço?')) {
+      this.bshopService.deleteServiceBShop(this.selectedItem.id).subscribe({
+        next: () => {
+          this.fetchupdates.emit();
+          this.toggleEvent.emit();
+          alert('Serviço excluído com sucesso')
         },
         error(er) {
           alert(er.error.message)
