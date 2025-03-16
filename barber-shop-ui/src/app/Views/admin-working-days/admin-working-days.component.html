@@ -1,0 +1,46 @@
+<div class="container mt-3 p-3">
+  <div class="d-flex justify-content-between mb-3">
+    <div>
+      <h1 class="page-title mb-0">Horários de funcionamento</h1>
+    </div>
+    <div>
+      <button class="btn new-booking-button" routerLink="novo-agendamento"
+        (click)="toggleSidebar()">Adicionar</button>
+    </div>
+  </div>
+  <ng-container>
+    <mat-accordion>
+      <mat-expansion-panel *ngFor="let workingDay of workingDaysList">
+        <mat-expansion-panel-header>
+            <mat-panel-title>{{workingDay.dayOfWeek | dayOfWeekPipe}}</mat-panel-title>
+          <mat-panel-description [ngStyle]="workingDay.isOpen? {'color': 'green'}: {'color': 'red'}">{{workingDay.isOpen
+            ? 'Aberto': 'Fechado'}}
+          </mat-panel-description>
+        </mat-expansion-panel-header>
+        <div class="d-flex justify-content-end">
+          <button class="btn new-booking-button" (click)="toggleSidebar(true, workingDay)">Editar</button>
+        </div>
+        <mat-list>
+          <div *ngFor="let shift of workingDay.shiftList; let i = index">
+            <div class="d-flex align-items-center">
+              <mat-list-item>
+                <span class="shift">{{i + 1 + 'º'}} Turno: Abre as: {{shift.startTime | time}}; Fecha as:
+                  {{shift.endTime | time}}.</span>
+              </mat-list-item>
+            </div>
+            <mat-divider></mat-divider>
+          </div>
+        </mat-list>
+      </mat-expansion-panel>
+    </mat-accordion>
+  </ng-container>
+  <ng-container *ngIf="workingDaysList.length == 0">
+    <hr class="text-white">
+    <div class="d-flex justify-content-center text-white p-5">
+      <h3>Nenhum horário de funcionamento cadastrado</h3>
+    </div>
+
+  </ng-container>
+</div>
+<app-admin-sidebar *ngIf="true" (toggleEvent)="toggleSidebar()" [opened]="openSidebar" [mode]="sidebarMode"
+  [selectedItem]="selectedWorkingDay" (fetchupdates)="fetchWorkingDays()"></app-admin-sidebar>
