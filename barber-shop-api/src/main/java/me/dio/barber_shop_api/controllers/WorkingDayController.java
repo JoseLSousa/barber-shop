@@ -41,13 +41,11 @@ public class WorkingDayController {
 
     @PutMapping("/{id}")
     public ResponseEntity<WorkingDay> update(@PathVariable String id, @Valid @RequestBody RequestWorkingDayDTO body) {
-
         return new ResponseEntity<>(service.update(id, body), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable String id) {
-        System.out.printf(id);
         service.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

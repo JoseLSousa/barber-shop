@@ -3,14 +3,17 @@ package me.dio.barber_shop_api.services;
 import lombok.RequiredArgsConstructor;
 import me.dio.barber_shop_api.dtos.shift.ShiftDTO;
 import me.dio.barber_shop_api.dtos.workingDay.RequestWorkingDayDTO;
-import me.dio.barber_shop_api.exceptions.*;
-import me.dio.barber_shop_api.model.DayOfWeek;
+import me.dio.barber_shop_api.exceptions.EmptyBodyPayload;
+import me.dio.barber_shop_api.exceptions.WorkingDayAlreadyExists;
+import me.dio.barber_shop_api.exceptions.WorkingDayIsClosed;
+import me.dio.barber_shop_api.exceptions.WorkingDayNotFound;
 import me.dio.barber_shop_api.model.Shift;
 import me.dio.barber_shop_api.model.WorkingDay;
 import me.dio.barber_shop_api.repository.WorkingDayRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -24,7 +27,7 @@ public class WorkingDayService {
 
     @Transactional(readOnly = true)
     public List<WorkingDay> findAll() {
-        return repository.findAll();
+        return repository.findAllByOrderByDayOfWeekAsc();
     }
 
     @Transactional(readOnly = true)
@@ -34,7 +37,7 @@ public class WorkingDayService {
 
     @Transactional
     public WorkingDay create(RequestWorkingDayDTO body) {
-        DayOfWeek day = DayOfWeek.getDayOfWeek(body.dayOfWeek());
+        DayOfWeek day = DayOfWeek.of(body.dayOfWeek().getValue());
 
         if (repository.existsByDayOfWeek(day)) {
             throw new WorkingDayAlreadyExists();
@@ -57,7 +60,7 @@ public class WorkingDayService {
     @Transactional
     public WorkingDay update(String id, RequestWorkingDayDTO body) {
         WorkingDay existingDay = findById(id);
-        existingDay.setDayOfWeek(DayOfWeek.getDayOfWeek(body.dayOfWeek()));
+        existingDay.setDayOfWeek(body.dayOfWeek());
         existingDay.setOpen(body.isOpen());
         List<Shift> existingShifts = shiftService.getShiftsByWorkingDayId(id);
 
@@ -75,7 +78,7 @@ public class WorkingDayService {
             }
         } else {
             for (Shift existingShift : existingShifts) {
-                if (!body.shiftList().stream().anyMatch(s -> s.id().equals(existingShift.getId()))) {
+                if (body.shiftList().stream().noneMatch(s -> s.id().equals(existingShift.getId()))) {
                     shiftService.deleteShift(existingShift.getId());
                 }
             }
@@ -91,8 +94,14 @@ public class WorkingDayService {
     }
 
     @Transactional(readOnly = true)
-    public String findByDayOfWeek(DayOfWeek day) {
+    public WorkingDay findByDayOfWeekEnum(DayOfWeek day) {
         return Optional.ofNullable(repository.findByDayOfWeek(day))
+                .orElseThrow(WorkingDayNotFound::new);
+    }
+
+    @Transactional(readOnly = true)
+    public String findByDayOfWeek(int day) {
+        return Optional.ofNullable(repository.findByDayOfWeek(DayOfWeek.of(day)))
                 .map(WorkingDay::getId)
                 .orElseThrow(WorkingDayNotFound::new);
     }

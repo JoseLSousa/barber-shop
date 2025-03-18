@@ -1,17 +1,16 @@
 package me.dio.barber_shop_api.repository;
 
-import me.dio.barber_shop_api.model.DayOfWeek;
 import me.dio.barber_shop_api.model.WorkingDay;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
-
-import java.util.ArrayList;
+import java.time.DayOfWeek;
 import java.util.List;
 import java.util.Optional;
 
 
+@SuppressWarnings("SpringDataMethodInconsistencyInspection")
 @Repository
 public interface WorkingDayRepository extends JpaRepository<WorkingDay, String> {
     Optional<WorkingDay> findById(String id);
@@ -27,6 +26,6 @@ public interface WorkingDayRepository extends JpaRepository<WorkingDay, String> 
     @Query("SELECT w.dayOfWeek FROM WorkingDay w WHERE w.isOpen = true")
     List<Integer> findDayOfWeekByIsOpenTrue();
 
-
+    List<WorkingDay> findAllByOrderByDayOfWeekAsc();
 
 }
