@@ -5,16 +5,21 @@ import lombok.AllArgsConstructor;
 import me.dio.barber_shop_api.dtos.booking.BookingDTO;
 import me.dio.barber_shop_api.dtos.booking.BookingListDTO;
 import me.dio.barber_shop_api.dtos.booking.ResponseBookingDTO;
-import me.dio.barber_shop_api.exceptions.*;
-import me.dio.barber_shop_api.model.*;
-import me.dio.barber_shop_api.repository.ServiceBShopRepository;
+import me.dio.barber_shop_api.exceptions.BookingAlreadyExists;
+import me.dio.barber_shop_api.exceptions.BookingDateInPast;
+import me.dio.barber_shop_api.exceptions.BookingNotFound;
+import me.dio.barber_shop_api.exceptions.BookingOutOfWorkingTimeBounds;
+import me.dio.barber_shop_api.model.Booking;
+import me.dio.barber_shop_api.model.Shift;
 import me.dio.barber_shop_api.repository.BookingRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.awt.print.Book;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -28,9 +33,21 @@ public class BookingService {
     private final AppUserService appUserService;
     private final ServiceBShopService serviceBShopService;
 
-    public Booking listById(String id) {
+    public Booking getById(String id) {
         return bookingRepository.findById(id)
                 .orElseThrow(BookingNotFound::new);
+    }
+
+    public List<BookingListDTO> getBookingsByParams(LocalDate date, String direction) {
+        LocalDate validDate = date == null ? LocalDate.now() : date;
+
+        if (direction.equalsIgnoreCase("DESC")) {
+            List<BookingListDTO> listReversed = bookingRepository.findAllBookings(validDate);
+            Collections.reverse(listReversed);
+            return listReversed;
+        }
+
+        return bookingRepository.findAllBookings(validDate);
     }
 
     public List<BookingListDTO> listByUser(HttpServletRequest request) {
@@ -38,11 +55,11 @@ public class BookingService {
         return bookingRepository.findBookingByAppUserId(appUserService.getUserByEmail(email).getId());
     }
 
-    public ArrayList<LocalTime> getAvailableHours(Integer day) {
-        String id = workingDayService.findByDayOfWeek(DayOfWeek.getDayOfWeek(day));
-        List<LocalTime> alreadyBookedTimes = bookingRepository.findBookingsByWorkingDayId(id);
+    public ArrayList<LocalTime> getAvailableHours(LocalDate date) {
         ArrayList<LocalTime> availableHours = new ArrayList<>();
-        for (LocalTime lt : verifyHours(id)) {
+        if (date.isBefore(LocalDate.now())) return availableHours;
+        List<LocalTime> alreadyBookedTimes = bookingRepository.findBookedHoursByDate(date);
+        for (LocalTime lt : verifyHours(date.getDayOfWeek())) {
             if (!alreadyBookedTimes.contains(lt)) {
                 availableHours.add(lt);
             }
@@ -51,25 +68,35 @@ public class BookingService {
         return availableHours;
     }
 
-
     public ResponseBookingDTO createBooking(BookingDTO body, HttpServletRequest request) {
-        if (bookingRepository.existsByTime(body.time())) throw new BookingAlreadyExists();
-        Booking newBooking = new Booking();
-        newBooking.setAppUser(appUserService.getUserByEmail(getEmailFromToken(request)));
-        newBooking.setWorkingDay(workingDayService.findById(body.workingDayId()));
-        newBooking.setServiceBShop(serviceBShopService.getById(body.serviceBShopId()));
-        if (!verifyHours(body.workingDayId()).contains(body.time()))
+        if (bookingRepository.existsByTimeAndDate(body.time(), body.date()))
+            throw new BookingAlreadyExists();
+
+        validateSelectedDayAndHours(body.date(), body.time());
+
+        if (!verifyHours(body.date().getDayOfWeek()).contains(body.time()))
             throw new BookingOutOfWorkingTimeBounds();
 
+        Booking newBooking = new Booking();
+        newBooking.setAppUser(appUserService.getUserByEmail(getEmailFromToken(request)));
+        newBooking.setWorkingDay(workingDayService.findByDayOfWeekEnum(body.date().getDayOfWeek()));
+        newBooking.setServiceBShop(serviceBShopService.getById(body.serviceBShopId()));
+        newBooking.setDate(body.date());
         newBooking.setTime(body.time());
-        return ResponseBookingDTO.fromEntity(bookingRepository.save(newBooking));
 
+        return ResponseBookingDTO.fromEntity(bookingRepository.save(newBooking));
     }
 
     public ResponseEntity<Void> cancelBooking(String id) {
-        if(!bookingRepository.existsById(id)) throw new BookingNotFound();
+        if (!bookingRepository.existsById(id)) throw new BookingNotFound();
         bookingRepository.deleteById(id);
         return ResponseEntity.noContent().build();
+    }
+
+    private void validateSelectedDayAndHours(LocalDate date, LocalTime time) {
+        workingDayService.findByDayOfWeek(date.getDayOfWeek().getValue());
+        if (date.isBefore(LocalDate.now())) throw new BookingDateInPast();
+        if (!verifyHours(date.getDayOfWeek()).contains(time)) throw new BookingOutOfWorkingTimeBounds();
     }
 
     private String getEmailFromToken(HttpServletRequest request) {
@@ -78,19 +105,18 @@ public class BookingService {
 
     }
 
-    private ArrayList<LocalTime> verifyHours(String id) {
-        List<Shift> shiftList = shiftService.getShiftsByWorkingDayId(id);
-        ArrayList<LocalTime> availableHours = new ArrayList<>();
-        LocalTime currentTime;
-        for (Shift s : shiftList) {
-            currentTime = s.getStartTime();
-            while (currentTime.isBefore(s.getEndTime())) {
+    private List<LocalTime> verifyHours(DayOfWeek day) {
+        List<Shift> shiftList = shiftService.getShiftsByDayOfWeek(day);
+        List<LocalTime> availableHours = new ArrayList<>();
+
+        for (Shift shift : shiftList) {
+            LocalTime currentTime = shift.getStartTime();
+            while (currentTime.isBefore(shift.getEndTime())) {
                 availableHours.add(currentTime);
                 currentTime = currentTime.plusHours(1);
             }
         }
+
         return availableHours;
     }
-
-
 }

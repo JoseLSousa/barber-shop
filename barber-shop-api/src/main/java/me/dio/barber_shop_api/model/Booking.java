@@ -1,12 +1,14 @@
 package me.dio.barber_shop_api.model;
 
-import java.time.LocalTime;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+@SuppressWarnings("JpaDataSourceORMInspection")
 @Entity
 @Data
 @AllArgsConstructor
@@ -32,5 +34,11 @@ public class Booking {
 
     @Column(nullable = false)
     private LocalTime time;
+
+    @Column(nullable = false)
+    private LocalDate date;
+
+    @Column(nullable = false)
+    private boolean isDone;
 
 }
