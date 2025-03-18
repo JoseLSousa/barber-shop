@@ -1,15 +1,12 @@
 package me.dio.barber_shop_api.services;
 
 import lombok.AllArgsConstructor;
-import me.dio.barber_shop_api.dtos.shift.ShiftDTO;
-import me.dio.barber_shop_api.exceptions.WorkingDayAlreadyExists;
-import me.dio.barber_shop_api.model.DayOfWeek;
 import me.dio.barber_shop_api.model.Shift;
-import me.dio.barber_shop_api.model.WorkingDay;
 import me.dio.barber_shop_api.repository.ShiftRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.DayOfWeek;
 import java.util.List;
 
 @Service
@@ -22,7 +19,7 @@ public class ShiftService {
         return repository.save(shift);
     }
 
-    public boolean existsShiftConflict(Shift newShift, DayOfWeek day) {
+    public boolean existsShiftConflict(Shift newShift, java.time.DayOfWeek day) {
         List<Shift> shifts = getShiftsByDayOfWeek(day);
         for (Shift shift : shifts) {
             if (shift.getStartTime().isBefore(newShift.getEndTime()) && newShift.getStartTime().isBefore(shift.getEndTime())) {

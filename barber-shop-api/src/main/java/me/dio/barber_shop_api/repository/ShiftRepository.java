@@ -1,13 +1,12 @@
 package me.dio.barber_shop_api.repository;
 
-import me.dio.barber_shop_api.model.DayOfWeek;
 import me.dio.barber_shop_api.model.Shift;
-import me.dio.barber_shop_api.model.WorkingDay;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.DayOfWeek;
 import java.time.LocalTime;
 import java.util.List;
 
