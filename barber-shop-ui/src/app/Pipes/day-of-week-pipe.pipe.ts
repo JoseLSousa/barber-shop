@@ -8,19 +8,19 @@ export class DayOfWeekPipePipe implements PipeTransform {
   transform(value: string): string {
     
     switch (value){
-      case 'SEGUNDA':
+      case 'MONDAY':
         return 'Segunda-feira'
-      case 'TERCA':
+      case 'TUESDAY':
         return 'Terça-feira'
-      case 'QUARTA':
+      case 'WEDNESDAY':
         return 'Quarta-feira'
-      case 'QUINTA':
+      case 'THURSDAY':
         return 'Quinta-feira'
-      case 'SEXTA':
+      case 'FRIDAY':
         return 'Sexta-feira'
-      case 'SABADO':
+      case 'SATURDAY':
         return 'Sábado'
-      case 'DOMINGO':
+      case 'SUNDAY':
         return 'Domingo'
       default:
         return 'dia não encontrado'
