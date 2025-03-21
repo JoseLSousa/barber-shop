@@ -52,7 +52,7 @@
                         [disabled]="workingDayForm.invalid || (shifts.length == 0 && workingDayForm.get('isOpen')?.value)">{{this.mode
                         == 'add'? 'Adicionar': 'Salvar'}}</button>
                     <button class="btn" (click)="workingDayForm.reset(); this.shifts.clear()">Limpar</button>
-                    <button class="btn" (click)="deleteWorkingDayMethod()" *ngIf="this.mode === 'edit'">Excluir</button>
+                    <button class="btn" (click)="deleteWorkingDay()" *ngIf="this.mode === 'edit'">Excluir</button>
                 </div>
             </ng-container>
             <ng-container *ngIf="currentPage == 'servicos'">
@@ -67,13 +67,57 @@
                     </mat-form-field>
                     <mat-form-field appearance="outline" class="w-100 mt-3">
                         <mat-label>Preço</mat-label>
-                        <input matInput formControlName="price" placeholder="Preço do serviço" mask="separator.2" separatorLimit="1000" [leadZero]="true">
+                        <input matInput formControlName="price" placeholder="Preço do serviço" mask="separator.2"
+                            separatorLimit="1000" [leadZero]="true">
                     </mat-form-field>
                     <div class="d-flex gap-2 mt-2">
-                        <button class="btn" (click)="onSubmit()"
-                            [disabled]="serviceForm.invalid">{{this.mode == 'add'? 'Adicionar': 'Salvar'}}</button>
+                        <button class="btn" (click)="onSubmit()" [disabled]="serviceForm.invalid">{{this.mode == 'add'?
+                            'Adicionar': 'Salvar'}}</button>
                         <button class="btn" (click)="serviceForm.reset()">Limpar</button>
-                        <button class="btn" (click)="deleteServiceBshopMethod()" *ngIf="this.mode === 'edit'">Excluir</button>
+                        <button class="btn"
+                            *ngIf="this.mode === 'edit'">Excluir</button>
+                    </div>
+                </form>
+            </ng-container>
+            <ng-container *ngIf="currentPage == 'agendamentos'">
+                <form [formGroup]="bookingForm">
+                    <!-- DatePicker -->
+                    <mat-form-field appearance="outline" class="w-100 mt-3">
+                        <mat-label>Data</mat-label>
+                        <input formControlName="date" matInput [matDatepicker]="picker">
+                        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                    <!-- TimesSelect -->
+                    <mat-form-field appearance="outline" class="w-100 mt-3">
+                        <mat-label>Horário</mat-label>
+                        <mat-select formControlName="time" formControlName="time">
+                            <mat-option *ngFor="let time of availableTimes" [value]="time">{{time}}</mat-option>
+                            <mat-option *ngIf="availableTimes.length == 0">Nenhum horário disponivel para o dia selecionado</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <!-- BarberShopServicesSelect -->
+                    <mat-form-field appearance="outline" class="w-100 mt-3">
+                        <mat-label>Serviço</mat-label>
+                        <mat-select formControlName="serviceBShopId">
+                            <mat-option *ngFor="let service of bShopServices" [value]="service.id">{{service.name}}</mat-option>
+                            <mat-option *ngIf="bShopServices.length == 0">Nenhum serviço disponível</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <!-- StatusSelect -->
+                    <mat-form-field appearance="outline" class="w-100 mt-3">
+                        <mat-label>Status</mat-label>
+                        <mat-select formControlName="isDone">
+                            <mat-option [value]="true">Concluído</mat-option>
+                            <mat-option [value]="false">Aguardando</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                    <div class="d-flex gap-2 mt-2">
+                        <button class="btn" (click)="onSubmit()" [disabled]="bookingForm.invalid">{{this.mode == 'add'?
+                            'Adicionar': 'Salvar'}}</button>
+                        <button class="btn" (click)="bookingForm.reset()">Limpar</button>
+                        <button class="btn"
+                            *ngIf="this.mode === 'edit'">Excluir</button>
                     </div>
                 </form>
             </ng-container>
