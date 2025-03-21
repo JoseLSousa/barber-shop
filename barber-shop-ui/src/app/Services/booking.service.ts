@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { PostBooking } from '../Interfaces/post-booking';
 import { Booking } from '../Interfaces/booking';
@@ -15,11 +15,22 @@ export class BookingService {
   getBookings():Observable<Booking[]> {
     return this.http.get<Booking[]>(`${this.apiUrl}/bookings`);
   }
-  getAvailableHours(dayOfMonth: string):Observable<string[]> {
-    return this.http.get<string[]>(`${this.apiUrl}/bookings/available-hours?day=${dayOfMonth}`);
+  getSearchBookings(date: string, direction?: string):Observable<Booking[]>{
+    let params = new HttpParams()
+    params = params.set('date', date);
+    !!direction ? params.set('direction', direction): 'asc'
+     return this.http.get<Booking[]>(`${this.apiUrl}/bookings/search`, {params: params});
+  }
+
+  getAvailableHours(date: string):Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/bookings/available-hours?date=${date}`);
   }
   postBooking(body: PostBooking):Observable<string>{
     return this.http.post<string>(`${this.apiUrl}/bookings`, body);
+  }
+
+  putBooking(id: string, body: Booking):Observable<void>{
+    return this.http.put<void>(`${this.apiUrl}/bookings/${id}`, body);
   }
 
   deleteBooking(id: string):Observable<void>{
