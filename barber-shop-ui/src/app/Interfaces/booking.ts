@@ -1,6 +1,11 @@
 export interface Booking {
-    bookingId: string;
+    bookingId?: string;
     time: string;
-    dayOfMonth: string;
-    serviceName: string;
+    date: string;
+    isDone: boolean;
+    dayOfWeek?: string;
+    serviceName?: string;
+    username?: string;
+    price?: number;
+    serviceBShopId?: string;
 }
