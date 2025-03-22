@@ -2,7 +2,7 @@ export interface Booking {
     bookingId?: string;
     time: string;
     date: string;
-    isDone: boolean;
+    isDone?: boolean;
     dayOfWeek?: string;
     serviceName?: string;
     username?: string;
