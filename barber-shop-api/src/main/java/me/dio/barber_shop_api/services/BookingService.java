@@ -87,6 +87,17 @@ public class BookingService {
         return ResponseBookingDTO.fromEntity(bookingRepository.save(newBooking));
     }
 
+    public ResponseBookingDTO updateBooking(String id, BookingDTO body) {
+        Booking booking = bookingRepository.findById(id).orElseThrow(BookingNotFound::new);
+        validateSelectedDayAndHours(body.date(), body.time());
+        booking.setServiceBShop(serviceBShopService.getById(body.serviceBShopId()));
+        booking.setWorkingDay(workingDayService.findByDayOfWeekEnum(body.date().getDayOfWeek()));
+        booking.setDone(body.isDone());
+        booking.setDate(body.date());
+        booking.setTime(body.time());
+        return ResponseBookingDTO.fromEntity(bookingRepository.save(booking));
+    }
+
     public ResponseEntity<Void> cancelBooking(String id) {
         if (!bookingRepository.existsById(id)) throw new BookingNotFound();
         bookingRepository.deleteById(id);

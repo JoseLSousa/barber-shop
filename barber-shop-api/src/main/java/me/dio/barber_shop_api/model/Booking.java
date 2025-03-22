@@ -13,7 +13,7 @@ import java.time.LocalTime;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "bookings", uniqueConstraints = {@UniqueConstraint(columnNames = {"time"})})
+@Table(name = "bookings")
 public class Booking {
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(nullable = false)
