@@ -23,9 +23,10 @@ export class BookingService {
   }
 
   getAvailableHours(date: string):Observable<string[]> {
-    return this.http.get<string[]>(`${this.apiUrl}/bookings/available-hours?date=${date}`);
+    let formattedDate = new Date(date).toISOString().split('T')[0];
+    return this.http.get<string[]>(`${this.apiUrl}/bookings/available-hours?date=${formattedDate}`);
   }
-  postBooking(body: PostBooking):Observable<string>{
+  postBooking(body: Booking):Observable<string>{
     return this.http.post<string>(`${this.apiUrl}/bookings`, body);
   }
 
