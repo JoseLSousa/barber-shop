@@ -11,6 +11,6 @@ export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({ eventCoalescing: true }),
   provideRouter(routes), provideAnimationsAsync(),
   provideHttpClient(withFetch(), withInterceptors([tokenInterceptor])),
-  {provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: {subscriptSizing:'dynamic'}}
+  { provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { subscriptSizing: 'dynamic' } }
 ]
 };

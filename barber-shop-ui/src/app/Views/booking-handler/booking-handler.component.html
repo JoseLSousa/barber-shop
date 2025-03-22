@@ -1,56 +1,56 @@
 <div class="container p-3">
     <div class="row justify-content-center">
         <div class="col-12 col-lg-8 p-4 column">
-            <mat-stepper class="stepper" [linear]="!newBookingForm.value.time" [orientation]="'vertical'" #stepper>
-                <mat-step [stepControl]="newBookingForm">
-                    <form [formGroup]="newBookingForm">
+            <mat-stepper class="stepper" [linear]="!bookingForm.value.time" [orientation]="'horizontal'" #stepper>
+                <mat-step [stepControl]="bookingForm">
+                    <form [formGroup]="bookingForm">
                         <ng-template matStepLabel>dia e horário</ng-template>
                         <div class="d-flex gap-2 flex-wrap">
-                            <mat-form-field class="w-100">
-                                <mat-label>Dia</mat-label>
-                                <mat-select formControlName="workingDayId" (closed)="onChange()">
-                                    <mat-option [value]="workingDay.id"
-                                        *ngFor="let workingDay of workingDaysList; let index">{{workingDay.dayOfMonth |
-                                        date}}</mat-option>
-                                </mat-select>
+                            <!-- DATEPICKER -->
+                            <mat-form-field appearance="outline" class="w-100 mt-3">
+                                <mat-label>Data</mat-label>
+                                <input matInput [matDatepicker]="picker" formControlName="date" format
+                                    (dateChange)="fetchAvailableTimes()">
+                                <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
                             </mat-form-field>
-                            <mat-form-field class="w-100">
-                                <mat-label>Hora</mat-label>
+                            <!-- SelectTime -->
+                            <mat-form-field class="w-100" appearance="outline">
+                                <mat-label>{{availableHours.length == 0 ? 'Nenhum horário disponível':
+                                    'Data'}}</mat-label>
                                 <mat-select formControlName="time">
-                                    <mat-option [value]="hour" *ngFor="let hour of availableHours, let index">{{hour |
+                                    <mat-option [value]="hour" *ngFor="let hour of availableHours">{{hour |
                                         time}}</mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
-                        <div>
+                        <div class="mt-3">
                             <button class="btn custom-btn" matStepperNext
-                                [disabled]="!newBookingForm.value.time">próximo</button>
+                                [disabled]="!bookingForm.value.time">próximo</button>
                         </div>
                     </form>
                 </mat-step>
-                <mat-step [stepControl]="newBookingForm" label="Escolha o serviço">
-                    <form [formGroup]="newBookingForm">
-                        <mat-form-field class="w-100">
+                <mat-step [stepControl]="bookingForm" label="Escolha o serviço">
+                    <form [formGroup]="bookingForm">
+                        <mat-form-field class="w-100" appearance="outline">
                             <mat-label>Serviço</mat-label>
                             <mat-select formControlName="serviceBShopId">
                                 <mat-option [value]="service.id" *ngFor="let service of servicesBShop">{{ service.name |
                                     servicePrice: service.price}}</mat-option>
                             </mat-select>
                         </mat-form-field>
-                        <div class="d-flex gap-2">
+                        <div class="d-flex gap-2 mt-3">
                             <button class="btn custom-btn" matStepperPrevious>voltar</button>
-                            <button class="btn custom-btn" matStepperNext
-                                [disabled]="!newBookingForm.value.serviceBShopId" (click)="postSubmit()">adicionar</button>
+                            <button class="btn custom-btn" matStepperNext [disabled]="!bookingForm.value.serviceBShopId"
+                                (click)="postSubmit()">adicionar</button>
                         </div>
                     </form>
                 </mat-step>
                 <mat-step>
                     <ng-template matStepLabel>Concluído</ng-template>
-                    <div class="mt-4"> 
+                    <div class="mt-4 text-center">
                         <p class="text-light">{{message}}</p>
                         <button class="btn custom-btn" (click)="returnToBookings()">Voltar</button>
-                    </div>
-                    <div>
                     </div>
                 </mat-step>
             </mat-stepper>
