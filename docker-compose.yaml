@@ -24,22 +24,18 @@ services:
 
   spring-backend-bshop:
     build:
-      context: .
-      dockerfile: barber-shop-api/Dockerfile
+      context: ./barber-shop-api
+      dockerfile: Dockerfile
     ports:
       - "8443:8443"
     environment:
-      - DB_ADDRESS=
-      - DB_PORT=
-      - DB_NAME=
-      - DB_USERNAME=
-      - DB_PASSWORD=
-      - JWT_SECRET=
-      - CORS_ORIGIN=
-      - SERVER_PORT=
-      - KEY_STORE=
-      - SSL_PASSWORD=
-      - CERT_NAME=
+    - DB_ADDRESS=10.254.0.2
+    - DB_PORT=5432
+    - DB_NAME=barber_shop
+    - DB_USERNAME=postgres
+    - DB_PASSWORD=postgres
+    - JWT_SECRET=mysecretkey
+    - CORS_ORIGIN=http://10.254.0.4:8080
     depends_on:
       postgres-db:
         condition: service_healthy
@@ -48,8 +44,8 @@ services:
         ipv4_address: 10.254.0.3
   angular-nginx-frontend-bshop:
     build:
-      context: .
-      dockerfile: barber-shop-ui/Dockerfile
+      context: ./barber-shop-ui
+      dockerfile: Dockerfile
     ports:
       - "8080:80"
     networks:
