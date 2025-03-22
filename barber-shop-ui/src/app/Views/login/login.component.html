@@ -6,14 +6,14 @@
         <div class="col-lg-5 login-col py-5 align-self-baseline">
             <h1 class="text-center text-light">Login</h1>
             <form class="d-flex flex-column align-items-center" [formGroup]="loginForm">
-                <mat-form-field class="w-75 mat-form-field">
+                <mat-form-field class="w-75 mat-form-field mb-3">
                     <mat-label>Email</mat-label>
                     <input matInput formControlName="email" (blur)="updateErrorMessage()" required>
                     @if(loginForm.invalid){
                     <mat-error>{{errorMessage()}}</mat-error>
                     }
                 </mat-form-field>
-                <mat-form-field class="w-75 mat-form-field">
+                <mat-form-field class="w-75 mat-form-field mb-3">
                     <mat-label>Senha</mat-label>
                     <input matInput [type]="hide() ? 'password' : 'text'" formControlName="password">
                     <button class="toggle-visibility" mat-icon-button matSuffix (click)="clickEvent($event)"
