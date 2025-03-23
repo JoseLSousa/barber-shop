@@ -1,6 +1,7 @@
 package me.dio.barber_shop_api.security;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+import me.dio.barber_shop_api.config.CorsConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -15,33 +16,25 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import me.dio.barber_shop_api.config.CorsConfig;
-
-import java.util.List;
-
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Autowired
-    SecurityFilter securityFilter;
+    private final SecurityFilter securityFilter;
 
-    @Autowired
-    CorsConfig CorsConfig;
+    private final CorsConfig CorsConfig;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
-                        .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/services-barber-shop").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE, "/services-barber-shop/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT, "/services-barber-shop/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.POST,"/working-days").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.PUT,"/working-days/**").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.DELETE,"/working-days/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/auth/login", "/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/services-barber-shop", "/working-days").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "/services-barber-shop/**", "/working-days/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.PUT, "/services-barber-shop/**", "/working-days/**", "/bookings/**").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "/bookings/search").hasRole("ADMIN")
                         .anyRequest().authenticated())
                         .cors(c -> c.configurationSource(CorsConfig))
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

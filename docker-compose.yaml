@@ -37,7 +37,7 @@ services:
       - DB_USERNAME=postgres
       - DB_PASSWORD=postgres
       - JWT_SECRET=YourStrongSecretKey
-      - CORS_ORIGIN=http://0.0.0.0:80
+      - CORS_ORIGIN=http://10.254.0.4:80
     depends_on:
       postgres-db:
         condition: service_healthy
