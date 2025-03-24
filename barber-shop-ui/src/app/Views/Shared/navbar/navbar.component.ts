@@ -11,6 +11,7 @@ import { CommonModule } from '@angular/common';
 })
 export class NavbarComponent implements OnInit {
   userName: string = ''
+  admin: boolean = localStorage.getItem('role') === 'ADMIN'
   constructor(private userService: UserService, private router: Router) { }
   ngOnInit(): void {
     this.userName = this.userService.getUserName()
