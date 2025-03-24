@@ -32,15 +32,20 @@ export class LoginComponent {
   onLoginSubmit() {
     if (this.loginForm.valid) {
       this.loginErrorMessage = false
-      this.authService.postLogin(this.loginForm.value).subscribe(
-        (res) => {
+      this.authService.postLogin(this.loginForm.value).subscribe({
+        next: (res) => {
           localStorage.setItem("token", res.token)
           localStorage.setItem("name", res.name)
+          localStorage.setItem('role', res.role)
           this.router.navigate(['home'])
         },
-        () => {
+        error: (err) => {
+          console.log(err);
+          
+          alert(err.error.message)
           this.loginErrorMessage = true
         }
+      }
       )
     }
   }

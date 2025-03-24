@@ -71,7 +71,7 @@ export class AdminSidebarComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['selectedItem'] && this.mode === 'edit') {
+    if (this.mode === 'edit') {
       this.patchFormsValues();
     } else {
       this.resetForms();
@@ -333,6 +333,15 @@ export class AdminSidebarComponent implements OnInit, OnChanges {
     if (confirm('Deseja realmente excluir este serviço?')) {
       this.bshopService.deleteServiceBShop(this.selectedItem.id).subscribe({
         next: () => this.handleSuccess('Serviço excluído com sucesso'),
+        error: (err) => this.handleError(err)
+      });
+    }
+  }
+
+  deleteBooking() {
+    if (confirm('Deseja realmente excluir este agendamento?')) {
+      this.bookingService.deleteBooking(this.selectedItem.bookingId).subscribe({
+        next: () => this.handleSuccess('Agendamento excluído com sucesso'),
         error: (err) => this.handleError(err)
       });
     }

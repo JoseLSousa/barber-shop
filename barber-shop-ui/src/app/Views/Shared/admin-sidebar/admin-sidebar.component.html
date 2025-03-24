@@ -62,7 +62,7 @@
                         <input matInput formControlName="name" placeholder="Nome do serviço">
                     </mat-form-field>
                     <mat-form-field appearance="outline" class="w-100 mt-3">
-                        <mat-label>Nome</mat-label>
+                        <mat-label>Descrição</mat-label>
                         <input matInput formControlName="description" placeholder="Descrição do serviço">
                     </mat-form-field>
                     <mat-form-field appearance="outline" class="w-100 mt-3">
@@ -74,7 +74,7 @@
                         <button class="btn" (click)="onSubmit()" [disabled]="serviceForm.invalid">{{this.mode == 'add'?
                             'Adicionar': 'Salvar'}}</button>
                         <button class="btn" (click)="serviceForm.reset()">Limpar</button>
-                        <button class="btn"
+                        <button class="btn" (click)="deleteService()"
                             *ngIf="this.mode === 'edit'">Excluir</button>
                     </div>
                 </form>
@@ -116,7 +116,7 @@
                         <button class="btn" (click)="onSubmit()" [disabled]="bookingForm.invalid">{{this.mode == 'add'?
                             'Adicionar': 'Salvar'}}</button>
                         <button class="btn" (click)="bookingForm.reset()">Limpar</button>
-                        <button class="btn"
+                        <button class="btn" (click)="deleteBooking()"
                             *ngIf="this.mode === 'edit'">Excluir</button>
                     </div>
                 </form>
