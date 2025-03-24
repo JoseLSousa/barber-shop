@@ -62,7 +62,7 @@ Este é um sistema de gerenciamento para uma barbearia, desenvolvido com **Angul
 1. Certifique-se de ter o **Docker** e o **Docker Compose** instalados em sua máquina.
 2. Clone o repositório do projeto:
    ```bash
-   git clone https://github.com/seu-usuario/barber-shop-angular-spring.git
+   git clone git@github.com:JoseLSousa/barber-shop.git
    cd barber-shop-angular-spring
    ```
 3. Execute o comando para iniciar os serviços:
