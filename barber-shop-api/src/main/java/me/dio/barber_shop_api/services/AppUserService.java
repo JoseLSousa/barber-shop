@@ -23,11 +23,11 @@ public class AppUserService {
     private final TokenService tokenService;
 
     public ResponseLoginDTO login(RequestLoginDTO dto) {
-        var name = repository.findNameByEmail(dto.email());
+        AppUser user = repository.findNameByEmail(dto.email());
         var userPassword = new UsernamePasswordAuthenticationToken(dto.email(), dto.password());
         var authentication = authManager.authenticate(userPassword);
         var token = tokenService.generateToken((AppUser) authentication.getPrincipal());
-        return ResponseLoginDTO.toDto(token, name.getName());
+        return ResponseLoginDTO.toDto(token, user.getName(), user.getRole().toString());
     }
 
     public void register(RequestRegisterDTO dto) {

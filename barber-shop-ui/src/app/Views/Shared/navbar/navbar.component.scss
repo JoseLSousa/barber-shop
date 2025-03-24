@@ -48,6 +48,10 @@
                     transition: ease-in-out .2s all;
                     color: #242424 !important;
                 }
+                &:focus{
+                    background-color: #dbb042;
+                    color: #242424;
+                }
             }
         }
     }

@@ -13,6 +13,8 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
     healthcheck:
       test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 10s
@@ -27,15 +29,15 @@ services:
       context: ./barber-shop-api
       dockerfile: Dockerfile
     ports:
-      - "8443:8443"
+      - "8080:8080"
     environment:
-    - DB_ADDRESS=10.254.0.2
-    - DB_PORT=5432
-    - DB_NAME=barber_shop
-    - DB_USERNAME=postgres
-    - DB_PASSWORD=postgres
-    - JWT_SECRET=mysecretkey
-    - CORS_ORIGIN=http://10.254.0.4:8080
+      - DB_ADDRESS=10.254.0.2
+      - DB_PORT=5432
+      - DB_NAME=barbershopdb
+      - DB_USERNAME=postgres
+      - DB_PASSWORD=postgres
+      - JWT_SECRET=YourStrongSecretKey
+      - CORS_ORIGIN=http://10.254.0.4:80
     depends_on:
       postgres-db:
         condition: service_healthy
@@ -47,7 +49,7 @@ services:
       context: ./barber-shop-ui
       dockerfile: Dockerfile
     ports:
-      - "8080:80"
+      - "80:80"
     networks:
       barber-shop-network:
         ipv4_address: 10.254.0.4

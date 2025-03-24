@@ -14,9 +14,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -24,6 +24,7 @@ public class WorkingDayService {
 
     private final WorkingDayRepository repository;
     private final ShiftService shiftService;
+    private final WorkingDayRepository workingDayRepository;
 
     @Transactional(readOnly = true)
     public List<WorkingDay> findAll() {
@@ -39,23 +40,30 @@ public class WorkingDayService {
     public WorkingDay create(RequestWorkingDayDTO body) {
         DayOfWeek day = DayOfWeek.of(body.dayOfWeek().getValue());
 
-        if (repository.existsByDayOfWeek(day)) {
-            throw new WorkingDayAlreadyExists();
-        }
+        if (repository.existsByDayOfWeek(day)) throw new WorkingDayAlreadyExists();
+        if (body.isOpen() && body.shiftList().isEmpty()) throw new EmptyBodyPayload();
 
-        if (body.isOpen() && body.shiftList().isEmpty()) {
-            throw new EmptyBodyPayload();
-        }
+        WorkingDay wd = new WorkingDay();
+        wd.setDayOfWeek(day);
+        wd.setOpen(body.isOpen());
 
-        WorkingDay workingDay = body.toEntity();
+        List<Shift> shiftList = new ArrayList<>();
         if (!body.shiftList().isEmpty()) {
-            List<Shift> shiftList = body.shiftList().stream()
-                    .map(s -> createShiftWithValidation(s, workingDay, day))
-                    .collect(Collectors.toList());
-            workingDay.setShiftList(shiftList);
+            for (ShiftDTO s : body.shiftList()) {
+                if (s.startTime() == null || s.endTime() == null) throw new EmptyBodyPayload();
+                Shift shift = new Shift();
+                shift.setStartTime(s.startTime());
+                shift.setEndTime(s.endTime());
+                shift.setWorkingDay(wd);
+                shiftList.add(shiftService.createShift(shift));
+            }
         }
-        return repository.save(workingDay);
+
+        wd.setShiftList(shiftList);
+
+        return workingDayRepository.save(wd);
     }
+
 
     @Transactional
     public WorkingDay update(String id, RequestWorkingDayDTO body) {
@@ -111,8 +119,8 @@ public class WorkingDayService {
         return repository.findDayOfWeekByIsOpenTrue();
     }
 
-    public void delete(String id){
-        if(!repository.existsById(id))throw new WorkingDayNotFound();
+    public void delete(String id) {
+        if (!repository.existsById(id)) throw new WorkingDayNotFound();
         repository.deleteById(id);
     }
 

@@ -22,7 +22,7 @@ export const routes: Routes = [
         ]
     },
     {
-        path: 'area-restrita', component: LayoutAdminComponent,
+        path: 'area-restrita', component: LayoutAdminComponent, canActivate: [authenticationGuard],
         children: [
             {
                 path: '', redirectTo: 'agendamentos', pathMatch: 'full'
