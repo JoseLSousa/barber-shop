@@ -7,14 +7,14 @@
             <h1 class="text-center text-light">Cadastro</h1>
             <span class="text-white ms-5 ps-2">*Obrigatório</span >
             <form class="d-flex flex-column align-items-center" [formGroup]="registerForm">
-                <mat-form-field class="w-75 mat-form-field">
+                <mat-form-field class="w-75 mat-form-field mb-3">
                     <mat-label>Nome</mat-label>
                     <input matInput formControlName="name" (blur)="updateNameErrorMessage()" required>
                     @if(registerForm.get('name')?.hasError('required')){
                     <mat-hint>{{NameErrorMessage()}}</mat-hint>
                     }
                 </mat-form-field>
-                <mat-form-field class="w-75 mat-form-field">
+                <mat-form-field class="w-75 mat-form-field mb-3">
                     <mat-label>Email</mat-label>
                     <input matInput formControlName="email" (blur)="updateEmailErrorMessage()" required>
                     @if(registerForm.invalid){
