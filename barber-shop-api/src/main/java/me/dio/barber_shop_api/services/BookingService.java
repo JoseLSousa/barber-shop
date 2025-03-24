@@ -11,6 +11,7 @@ import me.dio.barber_shop_api.exceptions.BookingNotFound;
 import me.dio.barber_shop_api.exceptions.BookingOutOfWorkingTimeBounds;
 import me.dio.barber_shop_api.model.Booking;
 import me.dio.barber_shop_api.model.Shift;
+import me.dio.barber_shop_api.model.WorkingDay;
 import me.dio.barber_shop_api.repository.BookingRepository;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -56,6 +57,8 @@ public class BookingService {
     }
 
     public ArrayList<LocalTime> getAvailableHours(LocalDate date) {
+        WorkingDay wd = workingDayService.findByDayOfWeekEnum(date.getDayOfWeek());
+        if(!wd.isOpen()) return new ArrayList<>();
         ArrayList<LocalTime> availableHours = new ArrayList<>();
         if (date.isBefore(LocalDate.now())) return availableHours;
         List<LocalTime> alreadyBookedTimes = bookingRepository.findBookedHoursByDate(date);
