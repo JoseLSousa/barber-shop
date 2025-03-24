@@ -6,6 +6,7 @@ import me.dio.barber_shop_api.dtos.appUser.RequestRegisterDTO;
 import me.dio.barber_shop_api.dtos.appUser.ResponseLoginDTO;
 import me.dio.barber_shop_api.exceptions.EmailAlreadyRegistered;
 import me.dio.barber_shop_api.model.AppUser;
+import me.dio.barber_shop_api.model.RoleEnum;
 import me.dio.barber_shop_api.repository.AppUserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -33,12 +34,11 @@ public class AppUserService {
     public void register(RequestRegisterDTO dto) {
         if (repository.findByEmail(dto.email()) != null) throw new EmailAlreadyRegistered();
         String encryptedPassword = new BCryptPasswordEncoder().encode(dto.password());
-
         AppUser user = new AppUser();
         user.setName(dto.name());
         user.setEmail(dto.email());
         user.setPassword(encryptedPassword);
-        user.setRole(dto.role());
+        user.setRole(dto.role() == null ? RoleEnum.USER : dto.role());
         repository.save(user);
     }
 
