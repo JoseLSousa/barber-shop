@@ -14,13 +14,13 @@ import { DayOfWeekPipePipe } from '../../Pipes/day-of-week-pipe.pipe';
 })
 export class BookingsComponent implements OnInit {
   myBookings: Booking[] = [];
-  displayedColumns: string[] = ['service', 'dayOfWeek', 'date', 'time', 'price', 'options'];
+  displayedColumns: string[] = ['service', 'dayOfWeek', 'date', 'time', 'price','isDone', 'options'];
   constructor(private bookingService: BookingService) { }
 
   ngOnInit(): void {
     this.bookingService.getBookings().subscribe({
       next: (data) => {
-        this.myBookings = data;
+        this.myBookings = data;        
       }
     });
   }
