@@ -15,7 +15,7 @@
                 </mat-form-field>
                 <mat-form-field class="w-75 mat-form-field mb-3">
                     <mat-label>Senha</mat-label>
-                    <input matInput [type]="hide() ? 'password' : 'text'" formControlName="password">
+                    <input matInput [type]="hide() ? 'password' : 'text'" formControlName="password" (keydown.enter)="onLoginSubmit()">
                     <button class="toggle-visibility" mat-icon-button matSuffix (click)="clickEvent($event)"
                         [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide()">
                         <mat-icon>{{hide() ? 'visibility_off' : 'visibility'}}</mat-icon>

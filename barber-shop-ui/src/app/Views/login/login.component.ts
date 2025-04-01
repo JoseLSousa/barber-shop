@@ -37,7 +37,11 @@ export class LoginComponent {
           localStorage.setItem("token", res.token)
           localStorage.setItem("name", res.name)
           localStorage.setItem('role', res.role)
-          this.router.navigate(['home'])
+          if(res.role == 'ADMIN') {
+            this.router.navigate(['/area-restrita'])
+          }else{
+            this.router.navigate(['home'])
+          }
         },
         () => {
           this.loginErrorMessage = true
