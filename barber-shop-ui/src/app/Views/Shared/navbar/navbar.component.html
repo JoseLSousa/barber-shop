@@ -1,3 +1,5 @@
+<<<<<<< Updated upstream
+<<<<<<< Updated upstream
 <nav class="navbar navbar-expand-lg justify-content-center gap-4">
     <a class="order-1 order-md-0 order-lg-0" routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
     <a class="order-2 order-md-1 order-lg-1" routerLink="/agenda" routerLinkActive="active">Agenda</a>
@@ -12,6 +14,41 @@
           <li><button class="dropdown-item" type="button" routerLink="area-restrita">Area restrita</button></li>
           <li><button class="dropdown-item" type="button" (click)="logout()">Sair</button></li>
         </ul>
+=======
+=======
+>>>>>>> Stashed changes
+<div class="container mt-3">
+  <div class="row justify-content-center align-items-center ">
+    <img class="col-12 order-md-2 col-md-2 mb-3 mb-lg-0" src="whiteLogo.svg" alt="" width="auto" height="80">
+    <div class="col text-center order-md-0 col-md-2 col-lg-1">
+      <a class="" routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+    </div>
+    <div class="col text-center order-md-1 col-md-2 col-lg-1">
+      <a class="" routerLink="/agenda" routerLinkActive="active">Agenda</a>
+    </div>
+    <div class="col text-center order-md-3 col-md-2 col-lg-1">
+      <a class="" routerLink="/home">SOBRE</a>
+    </div>
+    <ng-container *ngIf="userName == ''">
+      <div class="col text-center order-md-4 col-md-2 col-lg-1">
+        <a class="" routerLink="/login" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">LOGIN</a>
+<<<<<<< Updated upstream
+>>>>>>> Stashed changes
+=======
+>>>>>>> Stashed changes
       </div>
-    
-</nav>
+    </ng-container>
+    <ng-container *ngIf="userName != ''">
+      <div class="col text-center order-md-4 col-md-2 col-lg-1">
+        <div class="dropdown ">
+          <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{userName}}
+          </button>
+          <ul class="dropdown-menu">
+            <li><button class="dropdown-item" type="button" (click)="logout()">Sair</button></li>
+          </ul>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

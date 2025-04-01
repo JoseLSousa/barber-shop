@@ -1,15 +1,17 @@
 .row {
     background-color: #242424;
+    border: #dbb042 1px solid;
 }
 .title {
-    font-family: "Bebas Neue", serif;
-    > h1{
-        letter-spacing: .09rem;
-    }
-    >p{
-        font-family: "Lobster", serif !important;
-        font-size: large;
-    }
+    font-family: "Lobster", serif;
+    letter-spacing: .09rem;
+}
+p{
+    font-family: "Roboto" !important;
+    font-size: large;
+    text-align: justify;
+    text-justify: inter-word;
+    line-height: 1.6rem;
 }
 .btn{
     color: white;
@@ -18,5 +20,6 @@
     border-radius: 0;
     &:hover{
         background-color: #dbb042;
+        color: #242424;
     }
 }

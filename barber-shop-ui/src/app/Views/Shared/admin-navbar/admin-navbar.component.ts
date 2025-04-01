@@ -13,7 +13,7 @@ import { UserService } from '../../../Services/user.service';
 })
 export class AdminNavbarComponent implements OnInit {
   userName: string = ''
-  constructor(private userService: UserService, private router:Router) { }
+  constructor(private userService: UserService, public router: Router) { }
 
 
   ngOnInit() {
