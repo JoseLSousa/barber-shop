@@ -20,7 +20,7 @@ import { AdminSidebarComponent } from "../Shared/admin-sidebar/admin-sidebar.com
   styleUrl: './admin-bookings.component.scss'
 })
 export class AdminBookingsComponent implements OnInit, OnChanges {
-  displayedColumns: string[] = ['service', 'dayOfWeek', 'date', 'time', 'price', 'isDone', 'options'];
+  displayedColumns: string[] = ['customer','service', 'dayOfWeek', 'date', 'time', 'price', 'isDone', 'options'];
   bookingsList: Booking[] = []
   openSidebar: boolean = false;
   sidebarMode: 'edit' | 'add' = 'add'

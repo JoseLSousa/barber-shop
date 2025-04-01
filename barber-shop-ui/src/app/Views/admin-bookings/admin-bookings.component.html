@@ -10,6 +10,10 @@
     </div>
     <div class="table-container mt-3" *ngIf="bookingsList.length > 0">
         <table mat-table class="mat-elevation-z8" [dataSource]="bookingsList">
+            <ng-container matColumnDef="customer">
+                <th mat-header-cell *matHeaderCellDef>Cliente</th>
+                <td mat-cell *matCellDef="let element"> {{element.Username}} </td>
+            </ng-container>
             <ng-container matColumnDef="service">
                 <th mat-header-cell *matHeaderCellDef>Serviço</th>
                 <td mat-cell *matCellDef="let element"> {{element.serviceName}} </td>

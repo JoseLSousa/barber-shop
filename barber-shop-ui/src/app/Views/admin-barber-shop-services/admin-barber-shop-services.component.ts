@@ -16,7 +16,7 @@ export class AdminBarberShopServicesComponent implements OnInit {
   sidebarMode: 'edit' | 'add' = 'add'
   servicesList: ServiceBShop[] = []
   selectedItem!: ServiceBShop
-  displayedColumns: string[] = ['service', 'price', 'options'];
+  displayedColumns: string[] = ['service','description', 'price', 'options'];
   constructor(private bshopService: ServiceBShopService) {
 
   }

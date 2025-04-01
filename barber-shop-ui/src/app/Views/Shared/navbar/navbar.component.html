@@ -1,17 +1,31 @@
-<nav class="navbar navbar-expand-lg justify-content-center gap-4">
-    <a class="order-1 order-md-0 order-lg-0" routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
-    <a class="order-2 order-md-1 order-lg-1" routerLink="/agenda" routerLinkActive="active">Agenda</a>
-    <img src="whiteLogo.svg" class="order-0 order-md-2 order-lg-2" alt="" height="100px">
-    <a class="order-3 order-md-3 order-lg-3">SOBRE</a>
-    <a class="order-4 order-md-4 order-lg-4" routerLink="/login" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }" *ngIf="userName == ''">LOGIN</a>
-    <div class="dropdown order-4 order-md-4 order-lg-4" *ngIf="userName != ''">
-        <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-          {{userName}}
-        </button>
-        <ul class="dropdown-menu">
-          <li *ngIf="admin"><button class="dropdown-item" type="button" routerLink="area-restrita">Area restrita</button></li>
-          <li><button class="dropdown-item" type="button" (click)="logout()">Sair</button></li>
-        </ul>
+<div class="container mt-3">
+  <div class="row justify-content-center align-items-center ">
+    <img class="col-12 order-md-2 col-md-2 mb-3 mb-lg-0" src="whiteLogo.svg" alt="" width="auto" height="80">
+    <div class="col text-center order-md-0 col-md-2 col-lg-1">
+      <a class="" routerLink="/home" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Home</a>
+    </div>
+    <div class="col text-center order-md-1 col-md-2 col-lg-1">
+      <a class="" routerLink="/agenda" routerLinkActive="active">Agenda</a>
+    </div>
+    <div class="col text-center order-md-3 col-md-2 col-lg-1">
+      <a class="" routerLink="/home">SOBRE</a>
+    </div>
+    <ng-container *ngIf="userName == ''">
+      <div class="col text-center order-md-4 col-md-2 col-lg-1">
+        <a class="" routerLink="/login" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">LOGIN</a>
       </div>
-    
-</nav>
+    </ng-container>
+    <ng-container *ngIf="userName != ''">
+      <div class="col text-center order-md-4 col-md-2 col-lg-1">
+        <div class="dropdown ">
+          <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+            {{userName}}
+          </button>
+          <ul class="dropdown-menu">
+            <li><button class="dropdown-item" type="button" (click)="logout()">Sair</button></li>
+          </ul>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

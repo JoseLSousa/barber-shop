@@ -1,31 +1,44 @@
-<nav class="navbar navbar-expand-lg gap-4 d-flex justify-content-lg-center justify-content-evenly sticky-top z-1">
-    <div class="dropdown order-1 order-md-0 order-lg-0">
-        <button class="dropdown-toggle show" type="button" data-bs-toggle="dropdown" aria-expanded="true">
-            Menu
-        </button>
-        <ul class="dropdown-menu" #dropdown>
-            <li>
-                <button class="dropdown-item" type="button" routerLink="agendamentos"
-                    routerLinkActive="active">Agendamentos</button>
-            </li>
-            <li>
-                <button class="dropdown-item" type="button" routerLink="horarios-funcionamento"
-                    routerLinkActive="active">Horário de funcionamento</button>
-            </li>
-            <li>
-                <button class="dropdown-item" type="button" routerLink="servicos"
-                    routerLinkActive="active">Serviços</button>
-            </li>
-        </ul>
+<div class="container-fluid mt-3">
+    <div class="row justify-content-center align-items-center">
+        <div class="col-6 col-lg-3 d-flex justify-content-center order-1 order-lg-0">
+            <div class="dropdown">
+                <button class="dropdown-toggle show" type="button" data-bs-toggle="dropdown" aria-expanded="true">
+                    Menu
+                </button>
+                <ul class="dropdown-menu" #dropdown>
+                    <li>
+                        <button class="dropdown-item" type="button"
+                            routerLink="{{this.router.url.includes('area-restrita') ? 'agendamentos' : '/area-restrita/agendamentos'}}"
+                            routerLinkActive="active">Agendamentos</button>
+                    </li>
+                    <li>
+                        <button class="dropdown-item" type="button"
+                            routerLink="{{this.router.url.includes('area-restrita') ? 'horarios-funcionamento' : '/area-restrita/horarios-funcionamento'}}"
+                            routerLinkActive="active">Horário de funcionamento</button>
+                    </li>
+                    <li>
+                        <button class="dropdown-item" type="button"
+                            routerLink="{{this.router.url.includes('area-restrita') ? 'servicos' : '/area-restrita/servicos'}}"
+                            routerLinkActive="active">Serviços</button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="col-12 col-lg-2 order-0 order-lg-1 mb-3">
+            <a routerLink="/home">
+                <img src="whiteLogo.svg" class="img-fluid">
+            </a>
+        </div>
+        <div class="col-6 col-lg-3 d-flex justify-content-center order-2 order-lg-2">
+            <div class="dropdown">
+                <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    {{userName}}
+                </button>
+                <ul class="dropdown-menu" #dropdown2>
+    
+                    <li><button class="dropdown-item" type="button" (click)="logOff()">Sair</button></li>
+                </ul>
+            </div>
+        </div>
     </div>
-    <img src="whiteLogo.svg" class="order-0 order-md-2 order-lg-2" alt="" height="100px">
-    <div class="dropdown order-4 order-md-4 order-lg-4">
-        <button class="dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-            {{userName}}
-        </button>
-        <ul class="dropdown-menu" #dropdown2>
-
-            <li><button class="dropdown-item" type="button" (click)="logOff()">Sair</button></li>
-        </ul>
-    </div>
-</nav>
+</div>

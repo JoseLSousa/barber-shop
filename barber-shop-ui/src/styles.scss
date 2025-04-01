@@ -1,82 +1,81 @@
-
 // Custom Theming for Angular Material
 // For more information: https://material.angular.io/guide/theming
 @use '@angular/material' as mat;
 
 html {
-  @include mat.theme((
-    color: (
-      theme-type: dark,
-      primary: mat.$azure-palette,
-      tertiary: mat.$blue-palette,
-    ),
-    typography: Roboto,
-    density: 0,
-  ));
+  @include mat.theme((color: (theme-type: dark,
+        primary: mat.$azure-palette,
+        tertiary: mat.$blue-palette,
+      ),
+      typography: Roboto,
+      density: 0,
+    ));
 }
+
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Lobster&display=swap');
-
 html,
 body {
-  height: 100%;
+  height: 100vh;
+  width: 100% !important;
   background-color: #0f0f0f !important;
-}
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+} 
 
 * {
   margin: 0;
 }
 
-::-webkit-scrollbar{
+::-webkit-scrollbar {
   width: 7px;
   height: 5px
 }
 
-::-webkit-scrollbar-track{
- background-color: white;
+::-webkit-scrollbar-track {
+  background-color: white;
 }
 
-::-webkit-scrollbar-thumb{
+::-webkit-scrollbar-thumb {
   background-color: #827f7f;
 
 }
-::-webkit-scrollbar-thumb:hover{
+
+::-webkit-scrollbar-thumb:hover {
   transition: ease-in-out .2s all;
   background-color: #dbb042;
 
 }
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 :root {
   @include mat.form-field-overrides(( // Label
-  filled-caret-color: white, // Cor do cursor (barra piscante)
-  filled-input-text-color: white, // Cor do texto digitado
-  filled-label-text-color: white, // Cor inicial do label
-  filled-hover-label-text-color: white,
-  filled-active-indicator-color: white, // Linha padrão branca
-  filled-hover-active-indicator-color: white, // Linha branca ao passar o mouse
-  
-  filled-focus-active-indicator-color: #dbb042, // Linha fica #dbb042 quando clica no campo
-  filled-focus-label-text-color: #dbb042, // Cor do label quando foca no campo
-  
-  // Estilos para erro (voltam para branco)
-  filled-error-label-text-color: white, 
-  filled-error-hover-label-text-color: white,
-  filled-error-focus-label-text-color: white,
-  filled-error-active-indicator-color: white, 
-  filled-error-focus-active-indicator-color: white,
-  filled-error-hover-active-indicator-color: whitee));
+      filled-caret-color: white, // Cor do cursor (barra piscante)
+      filled-input-text-color: white, // Cor do texto digitado
+      filled-label-text-color: white, // Cor inicial do label
+      filled-hover-label-text-color: white,
+      filled-active-indicator-color: white, // Linha padrão branca
+      filled-hover-active-indicator-color: white, // Linha branca ao passar o mouse
 
-  @include mat.stepper-overrides((
-    // header-edit-state-icon-background-color: white,
-    // header-selected-state-label-text-color: white,
-    // header-icon-background-color: white,
-    // header-icon-foreground-color: #000000,
-    header-selected-state-icon-background-color: #dbb042,
-    header-label-text-font: ("Bebas Neue", serif),
-    // header-label-text-size: 20px,
-    // header-selected-state-label-text-size: 20px,
-    // container-color:#171717,
+      filled-focus-active-indicator-color: #dbb042, // Linha fica #dbb042 quando clica no campo
+      filled-focus-label-text-color: #dbb042, // Cor do label quando foca no campo
+
+      // Estilos para erro (voltam para branco)
+      filled-error-label-text-color: white,
+      filled-error-hover-label-text-color: white,
+      filled-error-focus-label-text-color: white,
+      filled-error-active-indicator-color: white,
+      filled-error-focus-active-indicator-color: white,
+      filled-error-hover-active-indicator-color: whitee));
+
+  @include mat.stepper-overrides(( // header-edit-state-icon-background-color: white,
+      // header-selected-state-label-text-color: white,
+      // header-icon-background-color: white,
+      // header-icon-foreground-color: #000000,
+      header-selected-state-icon-background-color: #dbb042,
+      header-label-text-font: ("Bebas Neue", serif),
+      // header-label-text-size: 20px,
+      // header-selected-state-label-text-size: 20px,
+      // container-color:#171717,
     ));
 }
