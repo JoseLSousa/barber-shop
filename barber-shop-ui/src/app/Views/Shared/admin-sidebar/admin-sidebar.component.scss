@@ -46,10 +46,14 @@
 
 .open {
     width: 450px;
+    @media (max-width: 425px) {
+        width: 100%;
+        
+    }
 }
 
 
-@media screen and (max-height: 450px) {
+@media (max-height: 450px) {
     .sidenav {
         padding-top: 15px;
     }
