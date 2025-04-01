@@ -17,7 +17,7 @@
                             <!-- SelectTime -->
                             <mat-form-field class="w-100" appearance="outline">
                                 <mat-label>{{availableHours.length == 0 ? 'Nenhum horário disponível':
-                                    'Data'}}</mat-label>
+                                    'Horário'}}</mat-label>
                                 <mat-select formControlName="time">
                                     <mat-option [value]="hour" *ngFor="let hour of availableHours">{{hour |
                                         time}}</mat-option>
