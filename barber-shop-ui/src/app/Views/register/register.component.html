@@ -1,12 +1,12 @@
 <div class="container">
     <div class="row pt-5">
         <div class="col-lg-7 d-flex justify-content-center align-items-center pe-5">
-            <img src="whiteLogo.svg" alt="BarberShopLogo" class="img-fluid">
+            <img src="whiteLogo.svg" alt="barberShopLogo" class="img-fluid" width="400" height="300">
         </div>
         <div class="col-lg-5 login-col py-4">
             <h1 class="text-center text-light">Cadastro</h1>
             <span class="text-white ms-5 ps-2">*Obrigatório</span >
-            <form class="d-flex flex-column align-items-center" [formGroup]="registerForm">
+            <form class="d-flex flex-column align-items-center mt-1" [formGroup]="registerForm">
                 <mat-form-field class="w-75 mat-form-field mb-3">
                     <mat-label>Nome</mat-label>
                     <input matInput formControlName="name" (blur)="updateNameErrorMessage()" required>
@@ -39,7 +39,7 @@
                     <button class="btn login-button" [disabled]="!registerForm.valid" (click)="onRegisterSubmit()">Cadastrar</button>
                 </div>
             </form>
-            <div class="text-center my-5">
+            <div class="text-center mt-5 mb-2">
                 <a routerLink="/login" class="register-anchor">Já tem conta? Faça login</a>
             </div>
         </div>
