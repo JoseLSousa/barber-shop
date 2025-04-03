@@ -19,6 +19,9 @@ export const routes: Routes = [
                     }
                 ]
             },
+            {
+                path: 'sobre', loadComponent: () => import('./Views/about/about.component').then(c => c.AboutComponent)
+            }
         ]
     },
     {
